@@ -1,0 +1,135 @@
+<ui:composition template="/templates/pagina.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
+
+	<ui:define name="title">
+        Cadastro de Quadras
+    </ui:define>
+
+	<ui:define name="content">
+		<h:form id="form1">
+			<p:growl id="mensagem" />
+
+			<p:panel header="Quadras Cadastradas"
+				styleClass="painel-custom-header" style="margin-top:10px;">
+
+				<p:commandButton value="Nova Quadra" icon="pi pi-plus"
+					styleClass="p-button-success"
+					actionListener="#{quadrasBean.criaObj()}" update=":form2"
+					oncomplete="PF('dlgQuadra').show()" resetValues="true" />
+
+				<p:dataTable id="quadrasTable" var="quadra"
+					value="#{quadrasBean.quadras}" paginator="true" rows="10"
+					reflow="true" paginatorPosition="bottom"
+					emptyMessage="Nenhuma quadra encontrada" style="margin-top:10px;"
+					rowKey="#{quadra.quaId}" selectionMode="single"
+					selection="#{quadrasBean.crudObj}">
+
+					<p:column headerText="Nome" sortBy="#{quadra.quaNome}"
+						filterBy="#{quadra.quaNome}">
+						<h:outputText value="#{quadra.quaNome}" />
+					</p:column>
+
+					<p:column headerText="Descrição / Esporte"
+						sortBy="#{quadra.quaDescricao}">
+						<h:outputText value="#{quadra.quaDescricao}" />
+					</p:column>
+
+					<p:column headerText="Modalidade"
+						sortBy="#{quadra.modalidade.modNome}">
+						<h:outputText value="#{quadra.modalidade.modNome}" />
+					</p:column>
+
+					<p:column headerText="Valor por Hora"
+						sortBy="#{quadra.quaValorHora}">
+						<h:outputText value="#{quadra.quaValorHora}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Situação" width="120">
+						<h:outputText value="#{quadra.quaAtiva ? 'Ativa' : 'Inativa'}" />
+					</p:column>
+
+					<p:column headerText="Ações" width="160">
+						<p:commandButton icon="pi pi-pencil" title="Editar"
+							styleClass="p-button-rounded p-button-info p-mr-2"
+							actionListener="#{quadrasBean.selecionarQuadra(quadra)}"
+							update=":form2" oncomplete="PF('dlgQuadra').show()"
+							resetValues="true">
+						</p:commandButton>
+
+						<p:commandButton icon="pi pi-trash" title="Excluir"
+							styleClass="p-button-rounded p-button-danger"
+							actionListener="#{quadrasBean.excluirQuadra(quadra)}"
+							process="@this" update=":form1:quadrasTable :form1:mensagem">
+							<p:confirm header="Atenção!"
+								message="Deseja realmente excluir esta quadra?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+		<h:form id="form2">
+			<p:dialog header="Cadastro de Quadra" widgetVar="dlgQuadra"
+				modal="true" resizable="false" closable="true" width="500px"
+				id="dlgQuadra">
+				<h:panelGrid columns="2" cellpadding="5" style="width:100%">
+
+					<h:outputLabel for="nome" value="Nome:" />
+					<p:inputText id="nome" value="#{quadrasBean.crudObj.quaNome}"
+						required="true" maxlength="100" />
+
+					<h:outputLabel for="descricao" value="Descrição:" />
+					<p:inputTextarea id="descricao"
+						value="#{quadrasBean.crudObj.quaDescricao}" rows="3"
+						autoResize="true" />
+
+					<h:outputLabel for="modalidade" value="Modalidade:" />
+					<p:selectOneMenu id="modalidade"
+						value="#{quadrasBean.crudObj.modalidade}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+							noSelectionOption="true" />
+						<f:selectItems value="#{quadrasBean.modalidades}" var="m"
+							itemLabel="#{m.modNome}"
+							itemValue="#{quadrasBean.modalidades[quadrasBean.modalidades.indexOf(m)]}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel for="valor" value="Valor por Hora:" />
+					<p:inputNumber id="valor"
+						value="#{quadrasBean.crudObj.quaValorHora}" mode="currency"
+						currency="BRL" />
+
+					<h:outputLabel for="ativa" value="Ativa:" />
+					<p:selectBooleanCheckbox id="ativa"
+						value="#{quadrasBean.crudObj.quaAtiva}" />
+				</h:panelGrid>
+
+				<p:separator />
+
+				<p:commandButton value="Salvar" icon="pi pi-check"
+					actionListener="#{quadrasBean.salvar}"
+					update=":form1:quadrasTable :form1:mensagem" process="@form"
+					oncomplete="if (!args.validationFailed) PF('dlgQuadra').hide()" />
+				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+					onclick="PF('dlgQuadra').hide()" styleClass="p-button-secondary" />
+			</p:dialog>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			</p:confirmDialog>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

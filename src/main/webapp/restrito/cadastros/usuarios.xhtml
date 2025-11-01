@@ -1,0 +1,134 @@
+<ui:composition template="/templates/pagina.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="title">
+        Cadastro de Usuários
+    </ui:define>
+
+	<ui:define name="content">
+		<h:form id="form1">
+			<p:growl id="mensagem" />
+
+			<p:panel header="Usuários Cadastrados"
+				styleClass="painel-custom-header" style="margin-top:10px;">
+
+				<p:commandButton id="btnNovoUsuario" value="Novo Usuário"
+					icon="pi pi-user-plus" styleClass="p:commandButton -button-success"
+					actionListener="#{usuarioBean.criaObj()}" update=":form2"
+					oncomplete="PF('dlgUsuario').show()" resetValues="true" />
+
+				<p:dataTable id="usuariosTable" var="usuario"
+					value="#{usuarioBean.usuarios}" paginator="true" rows="10"
+					reflow="true" paginatorPosition="bottom"
+					emptyMessage="Nenhum usuário encontrado" style="margin-top:10px;"
+					rowKey="#{usuario.userId}" selectionMode="single"
+					selection="#{usuarioBean.crudObj}">
+
+					<p:column headerText="Nome" sortBy="#{usuario.userNome}"
+						filterBy="#{usuario.userNome}">
+						<h:outputText value="#{usuario.userNome}" />
+					</p:column>
+
+					<p:column headerText="E-mail" sortBy="#{usuario.userEmail}"
+						filterBy="#{usuario.userEmail}">
+						<h:outputText value="#{usuario.userEmail}" />
+					</p:column>
+
+					<p:column headerText="CPF" sortBy="#{usuario.userCpf}">
+						<h:outputText value="#{usuario.userCpf}" />
+					</p:column>
+
+					<p:column headerText="Situação" sortBy="#{usuario.userAtivo}"
+						width="120" style="text-align: center;">
+						<i
+							class="pi #{usuario.userAtivo ? 'pi-check-circle' : 'pi-times-circle'}"
+							style="color: #{usuario.userAtivo ? 'green' : 'red'}; font-size: 1.2rem;" />
+					</p:column>
+
+					<p:column headerText="Ações" width="160"
+						style="text-align: center;">
+						<p:commandButton icon="pi pi-pencil" title="Editar"
+							styleClass="p-button-rounded p-button-info p-mr-2"
+							actionListener="#{usuarioBean.selecionarUsuario(usuario)}"
+							update=":form2" oncomplete="PF('dlgUsuario').show()"
+							resetValues="true" />
+						<p:commandButton icon="pi pi-trash" title="Excluir"
+							styleClass="p-button-rounded p-button-danger"
+							actionListener="#{usuarioBean.excluirUsuario(usuario)}"
+							process="@this"
+							update=":form1:usuariosTable :form1:mensagem">
+							<p:confirm header="Atenção!"
+								message="Deseja realmente excluir este usuário?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+		<h:form id="form2">
+			<p:dialog header="Dados do Usuário" widgetVar="dlgUsuario"
+				modal="true" resizable="false" closable="true" width="550px"
+				id="dlgUsuario">
+				<h:panelGrid columns="2" cellpadding="5" style="width:100%">
+					<h:outputLabel for="nome" value="Nome:" />
+					<p:inputText id="nome" value="#{usuarioBean.crudObj.userNome}"
+						required="true" maxlength="150" />
+
+					<h:outputLabel for="email" value="E-mail:" />
+					<p:inputText id="email" value="#{usuarioBean.crudObj.userEmail}"
+						required="true" maxlength="150" />
+
+					<h:outputLabel for="cpf" value="CPF:" />
+					<p:inputMask id="cpf" value="#{usuarioBean.crudObj.userCpf}"
+						required="true" mask="999.999.999-99" />
+
+					<h:outputLabel for="telefone" value="Telefone:" />
+					<p:inputMask id="telefone"
+						value="#{usuarioBean.crudObj.userTelefone}" mask="(99) 99999-9999" />
+
+					<h:outputLabel for="senha" value="Senha:" />
+					<p:password id="senha" value="#{usuarioBean.senhaParaSalvar}"
+						required="#{usuarioBean.crudObj.userId == null}" feedback="false"
+						placeholder="Deixe em branco para manter" />
+
+					<h:outputLabel for="perfil" value="Perfil:" />
+					<p:selectOneMenu id="perfil" value="#{usuarioBean.crudObj.perfil}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="O perfil é obrigatório.">
+						<f:selectItem itemLabel="Selecione..." itemValue="#{null}"
+							noSelectionOption="true" />
+						<f:selectItems value="#{perfilBean.perfis}" var="p"
+							itemLabel="#{p.perfDesc}" itemValue="#{p}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel for="ativa" value="Ativo:" />
+					<p:selectBooleanCheckbox id="ativa"
+						value="#{usuarioBean.crudObj.userAtivo}" />
+				</h:panelGrid>
+
+				<p:separator />
+
+				<p:commandButton value="Salvar" icon="pi pi-check"
+					actionListener="#{usuarioBean.salvar}"
+					update=":form1:usuariosTable :form1:mensagem"
+					process="@form"
+					oncomplete="if (!args.validationFailed) PF('dlgUsuario').hide()" />
+				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+					onclick="PF('dlgUsuario').hide()" styleClass="p-button-secondary" />
+			</p:dialog>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

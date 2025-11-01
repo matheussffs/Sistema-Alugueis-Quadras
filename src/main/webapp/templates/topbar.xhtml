@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
+
+<ui:composition>
+	<div
+		style="background-color: #fff; color: #333; display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #ddd;">
+		<div style="display: flex; align-items: center; flex-grow: 1;">
+			<div style="font-weight: bold; font-size: 22px; margin-left: 15px;">
+				Aluguel Quadras</div>
+
+			<p:menubar autoDisplay="true" hideDelay="1000"
+				rendered="#{gerBean.usuarioLogado}"
+				style="background:transparent; border:none; color:#333; margin-left:30px;">
+				<p:menuitem value="Quadras" icon="pi pi-fw pi-building" ajax="false"
+					url="#{request.contextPath}/restrito/cadastros/quadras.xhtml" />
+
+				<p:menuitem value="Usuários" icon="pi pi-fw pi-user" ajax="false"
+					url="#{request.contextPath}/restrito/cadastros/usuarios.xhtml" />
+
+				<p:menuitem value="Locações" icon="pi pi-fw pi-calendar" ajax="false"
+					url="#{request.contextPath}/restrito/cadastros/reserva.xhtml" />
+			</p:menubar>
+		</div>
+
+		<div>
+			<p:commandButton value="Login" icon="pi pi-fw pi-sign-in"
+				action="#{loginBean.redirecionarParaLogin()}"
+				rendered="#{not gerBean.usuarioLogado}" ajax="false"
+				styleClass="ui-button-info" />
+
+			<h:panelGroup rendered="#{gerBean.usuarioLogado}">
+				<p:outputLabel value="#{usuarioLogadoBean.usuarioLogado.userNome}"
+					style="margin-right:10px; font-weight:bold;" />
+				<p:commandButton value="Sair" icon="pi pi-fw pi-sign-out"
+					action="#{gerBean.logout}" ajax="false" styleClass="ui-button-info" />
+			</h:panelGroup>
+		</div>
+	</div>
+
+</ui:composition>
+</html>

@@ -1,0 +1,51 @@
+<ui:composition template="/templates/pagina.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Agenda de Reservas
+    </ui:define>
+
+    <ui:define name="content">
+    
+        <h:head>
+            <style type="text/css">
+                /* Verde para Confirmado */
+                .evento-confirmado {
+                    background-color: #10B981 !important; 
+                    border-color: #059669 !important;
+                }
+                /* Amarelo/Laranja para Pendente */
+                .evento-pendente {
+                    background-color: #F59E0B !important; 
+                    border-color: #D97706 !important;
+                }
+                /* Vermelho/Cinza para Cancelado */
+                .evento-cancelado {
+                    background-color: #EF4444 !important; 
+                    border-color: #DC2626 !important;
+                    text-decoration: line-through;
+                }
+            </style>
+        </h:head>
+
+        <h:form id="formAgenda">
+            <p:panel header="Agenda de Reservas"
+                     styleClass="painel-custom-header" style="margin-top:10px;">
+                
+                <p:schedule id="agenda" 
+                            value="#{reservaBean.model}" locale="pt"
+                            timeZone="America/Sao_Paulo"
+                            view="timeGridWeek" 
+                            rightHeaderTemplate="today prev,next timeGridWeek,dayGridMonth">
+                    
+                </p:schedule>
+
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

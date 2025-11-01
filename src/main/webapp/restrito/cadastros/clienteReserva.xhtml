@@ -1,0 +1,167 @@
+<ui:composition template="/templates/pagina.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<ui:define name="title">
+        Fazer Reserva
+    </ui:define>
+
+	<ui:define name="content">
+
+		<h:head>
+			<style type="text/css">
+.card-quadra {
+	margin: 8px;
+	border: 1px solid #ddd;
+	...
+}
+
+.card-quadra .ui-panel-titlebar { ...
+	
+}
+
+.card-quadra .ui-panel-content {
+	padding: 0 !important;
+}
+
+.quadra-imagem {
+	width: 100%;
+	height: 120px;
+	...
+}
+
+.quadra-info {
+	padding: 12px;
+	font-size: 13px;
+}
+
+.quadra-preco {
+	font-size: 16px;
+	font-weight: bold;
+	...
+}
+
+.quadra-botao {
+	padding: 0 12px 12px 12px;
+}
+</style>
+		</h:head>
+
+		<h:form id="formReserva">
+			<p:growl id="mensagem" showDetail="true" life="5000" />
+
+			<p:panel header="Escolha sua Quadra"
+				styleClass="painel-custom-header" style="margin-top:20px;">
+
+				<p:dataGrid var="quadra"
+					value="#{clienteReservaBean.quadrasDisponiveis}" columns="3"
+					layout="grid" paginator="true" rows="6"
+					emptyMessage="Nenhuma quadra ativa encontrada."
+					paginatorPosition="bottom">
+
+					<div class="card-quadra">
+						<p:panel header="#{quadra.quaNome}">
+
+							<img
+								src="https://placehold.co/400x200/10B981/FFFFFF?text=#{quadra.quaNome}&amp;font=inter"
+								alt="#{quadra.quaNome}" class="quadra-imagem" />
+
+							<div class="quadra-info">
+								<h:panelGrid columns="2" style="width:100%">
+									<h:outputText value="Esporte:" style="font-weight:bold;" />
+									<h:outputText value="#{quadra.modalidade.modNome}" />
+
+									<h:outputText value="Valor (1 hora):" style="font-weight:bold;" />
+									<h:outputText value="#{quadra.quaValorHora}"
+										styleClass="quadra-preco">
+										<f:convertNumber type="currency" currencySymbol="R$" />
+									</h:outputText>
+								</h:panelGrid>
+							</div>
+
+							<div class="quadra-botao">
+								<p:commandButton value="Agendar Horário"
+									icon="pi pi-calendar-plus" styleClass="p-button-success"
+									style="width:100%;"
+									actionListener="#{clienteReservaBean.selecionarQuadra(quadra)}"
+									oncomplete="PF('dlgReserva').show()"
+									update=":formDialogReserva" />
+							</div>
+						</p:panel>
+					</div>
+				</p:dataGrid>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Confirmar Agendamento" widgetVar="dlgReserva"
+			modal="true" resizable="false" closable="true" width="650px">
+
+			<h:form id="formDialogReserva">
+
+				<h:panelGrid columns="3" columnClasses="ui-g-3,ui-g-5,ui-g-4"
+					style="width:100%;" cellpadding="10">
+
+					<h:panelGroup>
+						<img
+							src="https://placehold.co/400x200/10B981/FFFFFF?text=#{clienteReservaBean.quadraSelecionada.quaNome}&amp;font=inter"
+							alt="#{clienteReservaBean.quadraSelecionada.quaNome}"
+							style="width: 100%; border-radius: 8px;" />
+
+						<h:panelGrid columns="2" style="width:100%; margin-top: 10px;">
+							<h:outputText value="Quadra:" style="font-weight:bold;" />
+							<h:outputText
+								value="#{clienteReservaBean.quadraSelecionada.quaNome}" />
+
+							<h:outputText value="Valor (1 hora):" style="font-weight:bold;" />
+							<h:outputText
+								value="#{clienteReservaBean.quadraSelecionada.quaValorHora}"
+								style="font-size: 1.1em; font-weight:bold; color: #059669;">
+								<f:convertNumber type="currency" currencySymbol="R$" />
+							</h:outputText>
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<h:panelGrid columns="1" style="width:100%;"
+						columnClasses="ui-g-12">
+
+						<h:outputLabel for="data" value="Data da Reserva:"
+							style="font-weight:bold;" />
+						<p:calendar id="data"
+							value="#{clienteReservaBean.dataSelecionada}"
+							pattern="dd/MM/yyyy" mask="true" required="true" mindate="today"
+							showOn="button" style="width:100%;" />
+
+						<h:outputLabel for="horario" value="Horário de Início:"
+							style="font-weight:bold; margin-top:10px;" />
+						<p:selectOneMenu id="horario"
+							value="#{clienteReservaBean.horarioSelecionado}" required="true"
+							requiredMessage="O horário é obrigatório." style="width:100%;">
+							<f:selectItem itemLabel="Selecione o horário..."
+								itemValue="#{null}" noSelectionOption="true" />
+							<f:selectItems value="#{clienteReservaBean.horariosParaEscolha}"
+								var="h" itemLabel="#{h}" itemValue="#{h}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<h:panelGroup />
+
+				</h:panelGrid>
+
+				<p:separator />
+
+				<p:commandButton value="Confirmar Reserva" icon="pi pi-check"
+					action="#{clienteReservaBean.salvarReserva}" process="@form"
+					update="@form :formReserva:mensagem" />
+
+				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+					onclick="PF('dlgReserva').hide()" styleClass="p-button-secondary" />
+
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

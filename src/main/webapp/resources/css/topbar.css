@@ -1,0 +1,51 @@
+.topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+
+    width: 100%;
+    height: 75px;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.logo {
+    width: 80px;
+}
+
+.div-esquerda {
+    display: flex;
+    align-items: center;
+}
+
+.div-centralizada{
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    display: flex; 
+    align-items: center;
+}
+
+.div-direita {
+    text-align: right; 
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+    font-weight: normal !important;
+}
+
+.labelNomeEmpresa{
+    text-align: center;
+    margin-left: 10px;
+}
+
+.icone {
+    margin: 0px 10px;
+}
