@@ -1,51 +1,132 @@
 <ui:composition template="/templates/pagina.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="title">
+	<ui:define name="title">
         Agenda de Reservas
     </ui:define>
 
-    <ui:define name="content">
-    
-        <h:head>
+	<ui:define name="content">
+
+		<h:head>
             <style type="text/css">
-                /* Verde para Confirmado */
-                .evento-confirmado {
-                    background-color: #10B981 !important; 
+                /* Esta é a correção.
+                  O primeiro seletor (ex: .evento-confirmado) aplica a cor na visualização "Mês".
+                  O segundo seletor (ex: .evento-confirmado .fc-event-main) força a cor 
+                  na visualização "Semana" e "Dia", pintando o elemento filho.
+                */
+                .evento-confirmado,
+                .evento-confirmado .fc-event-main {
+                    background-color: #10B981 !important; /* Verde */
                     border-color: #059669 !important;
+                    color: #fff !important; /* Bônus: texto branco */
                 }
-                /* Amarelo/Laranja para Pendente */
-                .evento-pendente {
-                    background-color: #F59E0B !important; 
+                
+                .evento-pendente,
+                .evento-pendente .fc-event-main {
+                    background-color: #F59E0B !important; /* Amarelo/Laranja */
                     border-color: #D97706 !important;
+                    color: #fff !important; /* Bônus: texto branco */
                 }
-                /* Vermelho/Cinza para Cancelado */
-                .evento-cancelado {
-                    background-color: #EF4444 !important; 
+
+                .evento-cancelado,
+                .evento-cancelado .fc-event-main {
+                    background-color: #EF4444 !important; /* Vermelho */
                     border-color: #DC2626 !important;
-                    text-decoration: line-through;
+                    color: #fff !important; /* Bônus: texto branco */
+                }
+                
+                /* Este seletor aplica o texto riscado em TODAS as visualizações
+                   para eventos cancelados.
+                */
+                .evento-cancelado {
+                    text-decoration: line-through !important;
                 }
             </style>
-        </h:head>
+		</h:head>
 
-        <h:form id="formAgenda">
-            <p:panel header="Agenda de Reservas"
-                     styleClass="painel-custom-header" style="margin-top:10px;">
-                
-                <p:schedule id="agenda" 
-                            value="#{reservaBean.model}" locale="pt"
-                            timeZone="America/Sao_Paulo"
-                            view="timeGridWeek" 
-                            rightHeaderTemplate="today prev,next timeGridWeek,dayGridMonth">
-                    
-                </p:schedule>
+		<h:form id="formAgenda">
+			<p:growl id="mensagem" showDetail="true" life="4000" />
 
-            </p:panel>
-        </h:form>
+			<p:panel header="Agenda de Reservas"
+				styleClass="painel-custom-header" style="margin-top:10px;">
 
-    </ui:define>
+				<p:schedule id="agenda" value="#{reservaBean.model}" locale="pt"
+					timeZone="America/Sao_Paulo" view="timeGridDay"
+					rightHeaderTemplate="today prev,next timeGridDay,timeGridWeek,dayGridMonth">
+
+					<p:ajax event="eventSelect" listener="#{reservaBean.onEventSelect}"
+						update=":formDialog" oncomplete="PF('dlgEvento').show()" />
+				</p:schedule>
+			</p:panel>
+		</h:form>
+
+		<p:dialog widgetVar="dlgEvento" header="Detalhes da Reserva"
+			modal="true" resizable="false" width="500px">
+
+			<h:form id="formDialog">
+				<h:panelGroup id="dialogContent"
+					rendered="#{not empty reservaBean.reservaSelecionada}">
+
+					<h:panelGrid columns="2" cellpadding="10" style="width:100%">
+
+						<h:outputText value="Cliente:" />
+						<h:outputText
+							value="#{reservaBean.reservaSelecionada.usuario.userNome}"
+							style="font-weight:bold;" />
+
+						<h:outputText value="Quadra:" />
+						<h:outputText
+							value="#{reservaBean.reservaSelecionada.quadra.quaNome}"
+							style="font-weight:bold;" />
+
+						<h:outputText value="Data:" />
+						<h:outputText
+							value="#{reservaBean.reservaSelecionada.resDtInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+
+						<h:outputText value="Horário:" />
+						<h:panelGroup>
+							<h:outputText
+								value="#{reservaBean.reservaSelecionada.resDtInicio}">
+								<f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo" />
+							</h:outputText>
+
+							<h:outputText value=" às " />
+
+							<h:outputText value="#{reservaBean.reservaSelecionada.resDtFim}">
+								<f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo" />
+							</h:outputText>
+						</h:panelGroup>
+
+						<h:outputText value="Status Atual:" />
+						<h:outputText value="#{reservaBean.reservaSelecionada.resStatus}"
+							style="font-weight:bold;" />
+
+					</h:panelGrid>
+					<p:separator />
+
+					<div
+						style="display: flex; justify-content: space-between; margin-top: 10px;">
+						<p:commandButton value="Confirmar Reserva" icon="pi pi-check"
+							styleClass="p-button-success"
+							action="#{reservaBean.confirmarReserva}" process="@form"
+							update=":formAgenda:agenda :formAgenda:mensagem"
+							rendered="#{reservaBean.reservaSelecionada.resStatus != 'CONFIRMADA'}" />
+
+						<p:commandButton value="Cancelar Reserva" icon="pi pi-times"
+							styleClass="p-button-danger"
+							action="#{reservaBean.cancelarReserva}" process="@form"
+							update=":formAgenda:agenda :formAgenda:mensagem"
+							rendered="#{reservaBean.reservaSelecionada.resStatus != 'CANCELADA'}" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+	</ui:define>
 </ui:composition>

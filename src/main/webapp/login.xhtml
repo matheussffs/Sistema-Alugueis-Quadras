@@ -1,71 +1,135 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:head>
-        <title>Login</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </h:head>
+<h:head>
+	<title>Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <h:body>
-        <style>
-            div ~ a {
-                text-align: center;
-            }
-            .ui-panelgrid-cell, .ui-inputtext, .ui-inputtextarea, .ui-panelgrid, .ui-panelgrid tbody, .ui-password, .ui-inputfield {
-			    width: 100%;
-			}
-            /* Adiciona um estilo para o novo botão (opcional) */
-            .btnCadastro {
-                width: 100%;
-                /* Estilo de botão secundário do PrimeFaces */
-                background-color: #6c757d; 
-                border-color: #6c757d;
-            }
-        </style>
+	<h:outputStylesheet library="css" name="main.css" />
+	<h:outputStylesheet library="css" name="estiloLogin.css" />
+	<h:outputScript library="js" name="primefacesLocale.js" />
 
-        <h:outputStylesheet library="css" name="main.css"  />
-        <h:outputStylesheet library="css" name="estiloLogin.css" />
-        <h:outputScript library="js" name="primefacesLocale.js" />
+	<style>
+div ~ a {
+	text-align: center;
+}
 
-        <div class="divBody">
-            <h:form id="form1">
-                <p:growl id="mensagem" />
+.ui-panelgrid-cell, .ui-inputtext, .ui-inputtextarea, .ui-panelgrid,
+	.ui-panelgrid tbody, .ui-password, .ui-inputfield {
+	width: 100%;
+}
 
-                <div class="divLogin">
-                    <p:panelGrid columns="1" layout="grid">
-                        <p:panelGrid columns="1" styleClass="padPg pgWidth pnTitulo">
-                            <p:outputLabel value="Realize o Login!" styleClass="tituloTexto" />
-                        </p:panelGrid>
+.btnCadastro {
+	width: 100%;
+	background-color: #6c757d;
+	border-color: #6c757d;
+}
+/* Estilo para o link "Esqueci minha senha" */
+.link-esqueci {
+	display: block;
+	text-align: center;
+	margin-top: 15px;
+	font-size: 14px;
+	color: #007bff;
+	text-decoration: none;
+}
+</style>
+</h:head>
 
-                        <p:panelGrid columns="1" styleClass="padPg pgWidth">
-                            <p:outputLabel value="CPF" for="usuario"  />
-                            <p:inputText id="usuario" value="#{loginBean.cpf}" styleClass="stInput" placeholder="Informe seu CPF" maxlength="14" />
-                        </p:panelGrid>
+<h:body>
+	<div class="divBody">
+		<h:form id="form1">
+			<p:growl id="mensagem" life="5000" />
 
-                        <p:panelGrid columns="1" styleClass="padPg pgWidth">
-                            <p:outputLabel value="Senha" for="senha"  />
-                            <p:password id="senha" value="#{loginBean.senha}" toggleMask="true" styleClass="stInput" placeholder="Informe sua senha" />
-                        </p:panelGrid>
+			<div class="divLogin">
+				<p:panelGrid columns="1" layout="grid">
+					<p:panelGrid columns="1" styleClass="padPg pgWidth pnTitulo">
+						<p:outputLabel value="Realize o Login!" styleClass="tituloTexto" />
+					</p:panelGrid>
 
-                        <p:panelGrid columns="1" styleClass="padPg pgWidth">
-                            <p:commandButton value="Login" actionListener="#{loginBean.doLogin()}" 
-                                             styleClass="btnLogin" process=":form1" update=":form1"
-                                             icon="pi pi-sign-in"
-                                             ajax="false" />
-                        </p:panelGrid>
+					<p:panelGrid columns="1" styleClass="padPg pgWidth">
+						<p:outputLabel value="CPF" for="usuario" />
+						<p:inputMask id="usuario" value="#{loginBean.cpf}"
+							styleClass="stInput" placeholder="Informe seu CPF"
+							mask="999.999.999-99" />
+					</p:panelGrid>
 
-                        <p:panelGrid columns="1" styleClass="padPg pgWidth">
-                            <p:button value="Cadastrar-se" 
-                                      icon="pi pi-user-plus"
-                                      outcome="/publico/cadastros/cadastro-cliente" 
-                                      styleClass="btnCadastro ui-button-secondary" /> 
-                        </p:panelGrid>
-                        </p:panelGrid>
-                </div>
-            </h:form>
-        </div>
-    </h:body>
+					<p:panelGrid columns="1" styleClass="padPg pgWidth">
+						<p:outputLabel value="Senha" for="senha" />
+						<p:password id="senha" value="#{loginBean.senha}"
+							toggleMask="true" styleClass="stInput"
+							placeholder="Informe sua senha" />
+					</p:panelGrid>
+
+					<p:panelGrid columns="1" styleClass="padPg pgWidth">
+						<p:commandButton value="Login"
+							actionListener="#{loginBean.doLogin()}" styleClass="btnLogin"
+							process="@form" update="@form" icon="pi pi-sign-in" ajax="false" />
+					</p:panelGrid>
+
+					<p:panelGrid columns="1" styleClass="padPg pgWidth">
+						<p:button value="Cadastrar-se" icon="pi pi-user-plus"
+							outcome="/publico/cadastros/cadastro-cliente.xhtml"
+							styleClass="btnCadastro ui-button-secondary" />
+					</p:panelGrid>
+
+					<p:commandLink value="Esqueci minha senha"
+						actionListener="#{loginBean.abrirDialogEsqueciMinhaSenha}"
+						styleClass="link-esqueci" process="@this" update=":formEsqueci"
+						oncomplete="PF('wvDlgEsqueciMinhaSenha').show()" />
+
+				</p:panelGrid>
+			</div>
+		</h:form>
+
+		<p:dialog header="Recuperar Senha" widgetVar="wvDlgEsqueciMinhaSenha"
+			modal="true" resizable="false" closable="true" width="450px">
+
+			<h:form id="formEsqueci">
+				<p:growl id="msgDialog" life="5000" />
+				<p:panelGrid columns="1" layout="grid"
+					styleClass="ui-panelgrid-blank">
+
+					<p:outputLabel
+						value="Para recuperar sua senha, confirme seu CPF e Telefone cadastrados."
+						style="margin-bottom: 15px;" />
+
+					<h:outputLabel for="cpfEsqueci" value="Seu CPF:" />
+					<p:inputMask id="cpfEsqueci" value="#{loginBean.cpf}"
+						mask="999.999.999-99" required="true" />
+
+					<h:outputLabel for="telEsqueci" value="Seu Telefone (c/ DDD):"
+						style="margin-top: 10px;" />
+					<p:inputMask id="telEsqueci" value="#{loginBean.telefone}"
+						mask="(99) 99999-9999" required="true" />
+
+					<p:separator style="margin-top: 15px;" />
+
+					<h:outputLabel for="novaSenha"
+						value="Nova Senha (mín. 8 caracteres):" />
+					<p:password id="novaSenha" value="#{loginBean.novaSenha}"
+						toggleMask="true" feedback="true" required="true" />
+
+					<h:outputLabel for="confSenha" value="Confirme a Nova Senha:"
+						style="margin-top: 10px;" />
+					<p:password id="confSenha"
+						value="#{loginBean.confirmacaoNovaSenha}" toggleMask="true"
+						required="true" />
+
+				</p:panelGrid>
+
+				<p:separator />
+
+				<p:commandButton value="Alterar Senha" icon="pi pi-check"
+					actionListener="#{loginBean.alterarSenha}" process="@form"
+					update="@form :form1:mensagem" />
+
+			</h:form>
+		</p:dialog>
+
+	</div>
+</h:body>
 </html>

@@ -12,6 +12,7 @@ import com.matheus.utils.JsfUtil;
 import com.matheus.utils.StringUtil;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Matheus Fassicollo
@@ -46,10 +48,25 @@ public class ClienteReservaBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        carregarHorarios();
+        
+        Map<String, String> params = FacesContext.getCurrentInstance()
+                                                 .getExternalContext()
+                                                 .getRequestParameterMap();
+        String modalidadeIdParam = params.get("modalidadeId");
+        
         HashMap<String, Object> filtros = new HashMap<>();
         filtros.put("quaAtiva", true); 
+        
+        if (modalidadeIdParam != null && !modalidadeIdParam.isEmpty()) {
+            try {
+                Integer modId = Integer.valueOf(modalidadeIdParam);
+                filtros.put("modalidadeId", modId); 
+            } catch (NumberFormatException e) {
+            }
+        }
+        
         quadrasDisponiveis = quadraService.filtrar(filtros);
-        carregarHorarios();
     }
     
     private void carregarHorarios() {

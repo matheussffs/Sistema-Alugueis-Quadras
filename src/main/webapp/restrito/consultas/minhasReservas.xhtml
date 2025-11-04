@@ -1,0 +1,78 @@
+<ui:composition template="/templates/pagina.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Minhas Reservas
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMinhasReservas">
+            <p:growl id="mensagem" showDetail="true" life="4000" />
+
+            <p:panel header="Minhas Reservas"
+                     styleClass="painel-custom-header" style="margin-top:10px;">
+
+                <p:dataTable id="tabelaReservas" var="reserva"
+                             value="#{minhasReservasBean.minhasReservas}"
+                             paginator="true" rows="10"
+                             reflow="true" paginatorPosition="bottom"
+                             emptyMessage="Você ainda não possui nenhuma reserva."
+                             style="margin-top:10px;">
+
+                    <p:column headerText="Quadra">
+                        <h:outputText value="#{reserva.quadra.quaNome}" />
+                    </p:column>
+                    
+                    <p:column headerText="Início" sortBy="#{reserva.resDtInicio}">
+                        <h:outputText value="#{reserva.resDtInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Fim" sortBy="#{reserva.resDtFim}">
+                        <h:outputText value="#{reserva.resDtFim}">
+                            <f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{reserva.resValorTotal}">
+                            <f:convertNumber type="currency" currencySymbol="R$" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Status" sortBy="#{reserva.resStatus}">
+                        <h:outputText value="#{reserva.resStatus}" 
+                                      style="color: #{reserva.resStatus == 'CANCELADA' ? 'red' : (reserva.resStatus == 'CONFIRMADA' ? 'green' : 'blue')}; font-weight: bold;" />
+                    </p:column>
+
+                    <p:column headerText="Ações" width="120" style="text-align: center;">
+                        <p:commandButton value="Cancelar"
+                                         icon="pi pi-times"
+                                         styleClass="ui-button-danger ui-button-outlined"
+                                         actionListener="#{minhasReservasBean.cancelar(reserva)}"
+                                         process="@this"
+                                         update=":formMinhasReservas:tabelaReservas :formMinhasReservas:mensagem"
+                                         rendered="#{reserva.resStatus == 'PENDENTE' or reserva.resStatus == 'CONFIRMADA'}">
+                            
+                            <p:confirm header="Confirmar" 
+                                       message="Deseja realmente cancelar esta reserva?" 
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+            
+            <p:confirmDialog global="true">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,126 @@
+<ui:composition template="/templates/pagina.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Dashboard
+    </ui:define>
+
+    <ui:define name="content">
+        <h:head>
+            <style type.css="text/css">
+                .stat-card {
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    padding: 20px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    text-align: center;
+                }
+                .stat-card .card-icon {
+                    font-size: 2.5rem;
+                    color: #10B981; /* Verde */
+                }
+                .stat-card .card-title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #6c757d; /* Cinza */
+                    margin-top: 10px;
+                    text-transform: uppercase;
+                }
+                .stat-card .card-value {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    color: #343a40; /* Preto suave */
+                }
+            </style>
+        </h:head>
+
+        <h:form id="formDashboard">
+            
+            <p:panelGrid columns="3" layout="grid" style="margin-top:20px;"
+                         styleClass="ui-panelgrid-blank">
+                
+                <p:panel styleClass="stat-card">
+                    <i class="pi pi-dollar card-icon" />
+                    <div class="card-title">Faturamento (Mês)</div>
+                    <div class="card-value">
+                        <h:outputText value="#{dashboardBean.faturamentoMes}">
+                            <f:convertNumber type="currency" currencySymbol="R$ " />
+                        </h:outputText>
+                    </div>
+                </p:panel>
+                
+                <p:panel styleClass="stat-card">
+                    <i class="pi pi-calendar-times card-icon" style="color: #F59E0B;" />
+                    <div class="card-title">Reservas Pendentes (Hoje)</div>
+                    <div class="card-value">
+                        <h:outputText value="#{dashboardBean.reservasPendentesHoje}" />
+                    </div>
+                </p:panel>
+                
+                <p:panel styleClass="stat-card">
+                    <i class="pi pi-users card-icon" style="color: #0EA5E9;" />
+                    <div class="card-title">Novos Clientes (Mês)</div>
+                    <div class="card-value">
+                        <h:outputText value="#{dashboardBean.novosClientesMes}" />
+                    </div>
+                </p:panel>
+            </p:panelGrid>
+            
+            <p:panelGrid columns="2" layout="grid" style="margin-top:20px;"
+                         styleClass="ui-panelgrid-blank">
+                
+                <p:panel header="Próximas Reservas Confirmadas">
+                    <p:dataTable var="res" value="#{dashboardBean.proximasReservas}"
+                                 rows="5" emptyMessage="Nenhuma reserva confirmada agendada.">
+                        <p:column headerText="Cliente">
+                            <h:outputText value="#{res.usuario.userNome}" />
+                        </p:column>
+                        <p:column headerText="Quadra">
+                            <h:outputText value="#{res.quadra.quaNome}" />
+                        </p:column>
+                        
+                        <p:column headerText="Horário">
+                            <h:outputText value="#{res.resDtInicio}">
+                                <f:convertDateTime pattern="dd/MM" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                            
+                            <h:outputText value=" - " />
+                            
+                            <h:outputText value="#{res.resDtInicio}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                            
+                            <h:outputText value=" às " />
+                            
+                            <h:outputText value="#{res.resDtFim}">
+                                <f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+                        </p:dataTable>
+                </p:panel>
+                
+                <p:panel header="Últimos Clientes Cadastrados">
+                    <p:dataTable var="cli" value="#{dashboardBean.ultimosClientes}"
+                                 rows="5" emptyMessage="Nenhum cliente novo.">
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{cli.userNome}" />
+                        </p:column>
+                        <p:column headerText="E-mail">
+                            <h:outputText value="#{cli.userEmail}" />
+                        </p:column>
+                        <p:column headerText="Data Cadastro">
+                            <h:outputText value="#{cli.userDataCadastro}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
