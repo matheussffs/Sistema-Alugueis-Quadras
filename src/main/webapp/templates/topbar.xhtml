@@ -6,44 +6,58 @@
 <ui:composition>
 	<div
 		style="background-color: #fff; color: #333; display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #ddd;">
-		
-        <div style="display: flex; align-items: center; flex-grow: 1;">
+
+		<div style="display: flex; align-items: center; flex-grow: 1;">
 			<div style="font-weight: bold; font-size: 22px; margin-left: 15px;">
 				Aluguel Quadras</div>
 
-            <p:menubar autoDisplay="true" hideDelay="1000"
-                rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'ADMIN'}"
+			<p:menubar autoDisplay="true" hideDelay="1000"
+				rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'ADMIN'}"
 				style="background:transparent; border:none; color:#333; margin-left:30px;">
-				
-                <p:menuitem value="Dashboard" icon="pi pi-fw pi-home" ajax="false"
+
+				<p:menuitem value="Dashboard" icon="pi pi-fw pi-home" ajax="false"
 					url="#{request.contextPath}/restrito/consultas/dashboard.xhtml" />
-                
-                <p:menuitem value="Agenda (Reservas)" icon="pi pi-fw pi-calendar" ajax="false"
+
+				<p:menuitem value="Agenda (Reservas)" icon="pi pi-fw pi-calendar"
+					ajax="false"
 					url="#{request.contextPath}/restrito/cadastros/reserva.xhtml" />
-					
-                <p:menuitem value="Quadras" icon="pi pi-fw pi-building" ajax="false"
+
+				<p:menuitem value="Quadras" icon="pi pi-fw pi-building" ajax="false"
 					url="#{request.contextPath}/restrito/cadastros/quadras.xhtml" />
-					
+
 				<p:menuitem value="Usuários" icon="pi pi-fw pi-user" ajax="false"
 					url="#{request.contextPath}/restrito/cadastros/usuarios.xhtml" />
+
+				<p:menuitem value="Gráficos" icon="pi pi-fw pi-chart-bar"
+					ajax="false"
+					url="#{request.contextPath}/restrito/consultas/dashboardGraficos.xhtml" />
 			</p:menubar>
-            
-            <p:menubar autoDisplay="true" hideDelay="1000"
-                rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'CLIENTE'}"
+
+			<p:menubar autoDisplay="true" hideDelay="1000"
+				rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'CLIENTE'}"
 				style="background:transparent; border:none; color:#333; margin-left:30px;">
-				
-                <p:menuitem value="Fazer Reserva" icon="pi pi-fw pi-calendar-plus" ajax="false"
-					url="#{request.contextPath}/restrito/cadastros/clienteReserva.xhtml" /> <p:menuitem value="Minhas Reservas" icon="pi pi-fw pi-book" ajax="false"
-					url="#{request.contextPath}/restrito/consultas/minhasReservas.xhtml" /> </p:menubar>
+
+				<p:menuitem value="Fazer Reserva" icon="pi pi-fw pi-calendar-plus"
+					ajax="false"
+					url="#{request.contextPath}/restrito/cadastros/clienteReserva.xhtml" />
+
+				<p:menuitem value="Minhas Reservas" icon="pi pi-fw pi-book"
+					ajax="false"
+					url="#{request.contextPath}/restrito/consultas/minhasReservas.xhtml" />
+
+				<p:menuitem value="Minha Conta" icon="pi pi-fw pi-user-edit"
+					ajax="false"
+					url="#{request.contextPath}/restrito/cadastros/minhaConta.xhtml" />
+			</p:menubar>
 		</div>
 
-        <div>
-            <p:commandButton value="Login" icon="pi pi-fw pi-sign-in"
+		<div>
+			<p:commandButton value="Login" icon="pi pi-fw pi-sign-in"
 				action="#{loginBean.redirecionarParaLogin()}"
 				rendered="#{not gerBean.usuarioLogado}" ajax="false"
 				styleClass="ui-button-info" />
 
-            <h:panelGroup rendered="#{gerBean.usuarioLogado}">
+			<h:panelGroup rendered="#{gerBean.usuarioLogado}">
 				<p:outputLabel value="#{usuarioLogadoBean.usuarioLogado.userNome}"
 					style="margin-right:10px; font-weight:bold;" />
 				<p:commandButton value="Sair" icon="pi pi-fw pi-sign-out"

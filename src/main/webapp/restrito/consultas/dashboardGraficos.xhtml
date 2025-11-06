@@ -1,0 +1,65 @@
+<ui:composition template="/templates/pagina.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Gráficos e Estatísticas
+    </ui:define>
+
+    <ui:define name="content">
+    
+        <h:head>
+            <style type="text/css">
+                .grafico-panel-compacto .ui-panel-content {
+                    padding: 0.5rem !important; 
+                }
+            </style>
+        </h:head>
+    
+        <h:form id="formGraficos">
+            
+            <p:panelGrid columns="3" layout="grid" style="margin-top:20px;"
+                         styleClass="ui-panelgrid-blank">
+                
+                <p:panel header="Faturamento Mensal" styleClass="grafico-panel-compacto">
+                    <p:lineChart model="#{dashboardGraficosBean.faturamentoModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+                <p:panel header="Quadras Mais Populares" styleClass="grafico-panel-compacto">
+                    <p:barChart model="#{dashboardGraficosBean.quadrasModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+                <p:panel header="Reservas por Esporte" styleClass="grafico-panel-compacto">
+                    <p:donutChart model="#{dashboardGraficosBean.modalidadesModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+            </p:panelGrid>
+            
+            <p:panelGrid columns="3" layout="grid" style="margin-top:20px;"
+                         styleClass="ui-panelgrid-blank">
+                
+                <p:panel header="Reservas por Status" styleClass="grafico-panel-compacto">
+                    <p:donutChart model="#{dashboardGraficosBean.statusModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+                <p:panel header="Novos Clientes (Este Ano)" styleClass="grafico-panel-compacto">
+                    <p:lineChart model="#{dashboardGraficosBean.clienteGrowthModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+                <p:panel header="Horários de Pico" styleClass="grafico-panel-compacto">
+                    <p:barChart model="#{dashboardGraficosBean.peakHoursModel}" 
+                                 style="height: 300px;" />
+                </p:panel>
+                
+            </p:panelGrid>
+            </h:form>
+    </ui:define>
+</ui:composition>
