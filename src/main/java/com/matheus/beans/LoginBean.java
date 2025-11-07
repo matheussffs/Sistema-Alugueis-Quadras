@@ -91,7 +91,7 @@ public class LoginBean implements Serializable {
 			if (!StringUtil.isNullOrEmpty(paginaDestino)) {
 				JsfUtil.redirect(paginaDestino);
 			} else {
-				JsfUtil.redirect("/SistemaAlugueis/restrito/cadastros/clienteReserva.xhtml");
+				JsfUtil.redirect("/SistemaAlugueis/restrito/consultas/clienteHome.xhtml");
 			}
 		} else if ("ADMIN".equals(perfilNome)) {
 			JsfUtil.redirect("/SistemaAlugueis/restrito/consultas/dashboard.xhtml");

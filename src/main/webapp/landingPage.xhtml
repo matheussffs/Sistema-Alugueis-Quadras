@@ -1,0 +1,468 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Sistema Quadras - Reserve Já</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<script src="https://cdn.tailwindcss.com"></script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+		rel="stylesheet" />
+
+	<script type="text/javascript">
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                DEFAULT: '#10B981', 
+                '50': '#ECFDF5',
+                '100': '#D1FAE5',
+                '200': '#A7F3D0',
+                '300': '#6EE7B7',
+                '400': '#34D399',
+                '500': '#10B981',
+                '600': '#059669',
+                '700': '#047857',
+                '800': '#065F46',
+                '900': '#064E3B',
+              },
+              secondary: {
+                DEFAULT: '#0EA5E9',
+                '50': '#F0F9FF',
+                '100': '#E0F2FE',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+	<style type="text/css">
+html {
+	scroll-behavior: smooth;
+}
+
+.hero-carousel {
+	border-radius: 1.5rem;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	overflow: hidden;
+	position: relative;
+}
+
+.hero-carousel .ui-carousel-viewport {
+	height: 450px;
+}
+
+.hero-carousel .carousel-image {
+	width: 100%;
+	height: 450px;
+	object-fit: cover;
+}
+
+.hero-carousel .ui-carousel-header, .hero-carousel .ui-carousel-footer {
+	display: none;
+}
+
+.hero-carousel .ui-carousel-prev, .hero-carousel .ui-carousel-next {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: rgba(255, 255, 255, 0.8) !important;
+	color: #333 !important;
+	border-radius: 50%;
+	width: 3rem;
+	height: 3rem;
+	margin: 0 1.5rem;
+	z-index: 10;
+}
+
+.hero-carousel .ui-carousel-prev {
+	left: 0;
+}
+
+.hero-carousel .ui-carousel-next {
+	right: 0;
+}
+
+.hero-carousel .ui-carousel-dots-container {
+	position: absolute;
+	bottom: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+}
+
+.hero-carousel .ui-carousel-dot-link {
+	background: rgba(255, 255, 255, 0.5) !important;
+	width: 0.75rem;
+	height: 0.75rem;
+	border-radius: 50%;
+	margin: 0 0.25rem;
+}
+
+.hero-carousel .ui-carousel-dot-link.ui-state-active {
+	background: #ffffff !important;
+}
+</style>
+
+</h:head>
+
+<h:body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+	<div class="min-h-screen flex flex-col">
+
+		<div class="bg-white shadow-sm sticky top-0 z-50">
+			<nav class="px-6 py-4 flex justify-between items-center"> <a
+				href="#" class="text-2xl font-bold text-primary-600"> <span
+				style="font-size: 1.2em; vertical-align: middle;">&#128197;</span>
+				ReserveJá
+			</a>
+
+			<div class="hidden md:flex items-center space-x-6">
+				<a href="#features"
+					class="text-gray-600 hover:text-primary-600 transition duration-300">Recursos</a>
+				<a href="#how-it-works"
+					class="text-gray-600 hover:text-primary-600 transition duration-300">Como
+					Funciona</a> <a href="#testimonials"
+					class="text-gray-600 hover:text-primary-600 transition duration-300">Depoimentos</a>
+				<a href="login.xhtml"
+					class="bg-primary-500 text-white px-5 py-2 rounded-full font-medium hover:bg-primary-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+					Entrar / Agendar </a>
+			</div>
+
+			<div class="md:hidden">
+				<button id="mobile-menu-button"
+					class="text-gray-700 focus:outline-none text-2xl"
+					style="line-height: 1;">
+					<span id="menu-icon-open" class="w-6 h-6">&#9776;</span> <span
+						id="menu-icon-close" class="w-6 h-6 hidden">&times;</span>
+				</button>
+			</div>
+			</nav>
+
+			<div id="mobile-menu"
+				class="md:hidden hidden bg-white shadow-lg absolute top-full left-0 w-full">
+				<a href="#features"
+					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Recursos</a>
+				<a href="#how-it-works"
+					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Como
+					Funciona</a> <a href="#testimonials"
+					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Depoimentos</a>
+				<a href="login.xhtml"
+					class="block px-6 py-3 bg-primary-500 text-white text-center font-medium m-4 rounded-lg hover:bg-primary-600">
+					Entrar / Agendar </a>
+			</div>
+		</div>
+		<div class="flex-grow">
+
+			<div class="bg-white pt-20 pb-20 md:pt-28 md:pb-28">
+				<div class="container mx-auto max-w-7xl px-6">
+					<div class="max-w-3xl mx-auto text-center">
+						<span
+							class="text-primary-600 font-semibold uppercase tracking-wider">Seu
+							jogo começa aqui</span>
+						<h1
+							class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mt-3 mb-6 leading-tight">
+							Alugue quadras esportivas com facilidade</h1>
+						<p class="text-lg text-gray-600 mb-10">Encontre a quadra
+							perfeita, verifique a disponibilidade em tempo real e reserve seu
+							horário em segundos.</p>
+						<a href="login.xhtml"
+							class="bg-primary-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-600 transition duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+							Começar a reservar </a>
+					</div>
+
+					<div class="relative mt-16 md:mt-20">
+						<h:form>
+							<p:carousel value="#{landingPageBean.imagensQuadras}"
+								var="imagem" numVisible="1" numScroll="1" circular="true"
+								autoplayInterval="5000" styleClass="hero-carousel">
+
+								<img src="#{imagem}" alt="Imagem da Quadra"
+									class="carousel-image" />
+
+							</p:carousel>
+						</h:form>
+					</div>
+				</div>
+			</div>
+			<div id="features" class="py-20 md:py-28 bg-gray-50">
+				<div class="container mx-auto max-w-7xl px-6">
+					<div class="text-center max-w-3xl mx-auto mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Tudo
+							que você precisa em um só lugar</h2>
+						<p class="text-lg text-gray-600">Nosso sistema foi pensado
+							para simplificar a sua vida e garantir o seu jogo.</p>
+					</div>
+
+					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#128269;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Busca
+								Inteligente</h3>
+							<p class="text-gray-600">Filtre por esporte, localização,
+								horário e tipo de piso. Encontre exatamente o que procura.</p>
+						</div>
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#128198;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Agenda
+								em Tempo Real</h3>
+							<p class="text-gray-600">Veja apenas os horários disponíveis
+								e evite conflitos. Reserva confirmada na hora.</p>
+						</div>
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#128179;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Pagamento
+								Online Seguro</h3>
+							<p class="text-gray-600">Pague sua reserva com Pix ou cartão
+								de crédito com total segurança e praticidade.</p>
+
+						</div>
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#128276;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Lembretes
+								Automáticos</h3>
+							<p class="text-gray-600">Receba notificações sobre seus
+								próximos jogos e nunca mais esqueça um horário.</p>
+						</div>
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#128101;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Gestão
+								de Grupos</h3>
+							<p class="text-gray-600">Organize seus times, convide amigos
+								e divida o pagamento da reserva facilmente.</p>
+						</div>
+						<div
+							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+							<div
+								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+								<span style="font-size: 1.5em;">&#127941;</span>
+							</div>
+							<h3 class="text-xl font-semibold text-gray-900 mb-3">Instalações
+								de Qualidade</h3>
+							<p class="text-gray-600">Jogue nas melhores quadras, com
+								manutenção em dia, iluminação de ponta e vestiários completos.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="how-it-works" class="py-20 md:py-28 bg-white">
+				<div class="container mx-auto max-w-7xl px-6">
+					<div class="text-center max-w-3xl mx-auto mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Reserve
+							em 3 passos simples</h2>
+						<p class="text-lg text-gray-600">Jogar seu esporte favorito
+							nunca foi tão fácil.</p>
+					</div>
+
+					<div class="relative">
+						<div
+							class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-primary-200"
+							style="transform: translateY(-50%);"></div>
+
+						<div class="relative grid md:grid-cols-3 gap-12">
+							<div class="text-center z-10">
+								<div class="relative inline-block">
+									<div
+										class="w-24 h-24 bg-primary-500 text-white text-3xl font-bold rounded-full flex items-center justify-center shadow-lg">1</div>
+								</div>
+								<h3 class="text-2xl font-semibold text-gray-900 mt-6 mb-3">Encontre</h3>
+								<p class="text-gray-600 px-4">Busque pela quadra ideal perto
+									de você.</p>
+							</div>
+							<div class="text-center z-10">
+								<div class="relative inline-block">
+									<div
+										class="w-24 h-24 bg-primary-500 text-white text-3xl font-bold rounded-full flex items-center justify-center shadow-lg">2</div>
+								</div>
+								<h3 class="text-2xl font-semibold text-gray-900 mt-6 mb-3">Reserve</h3>
+								<p class="text-gray-600 px-4">Escolha o melhor horário na
+									agenda e confirme.</p>
+							</div>
+							<div class="text-center z-10">
+								<div class="relative inline-block">
+									<div
+										class="w-24 h-24 bg-primary-500 text-white text-3xl font-bold rounded-full flex items-center justify-center shadow-lg">3</div>
+								</div>
+								<h3 class="text-2xl font-semibold text-gray-900 mt-6 mb-3">Jogue!</h3>
+								<p class="text-gray-600 px-4">É só chegar e aproveitar o seu
+									jogo.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="testimonials" class="py-20 md:py-28 bg-gray-50">
+				<div class="container mx-auto max-w-7xl px-6">
+					<div class="text-center max-w-3xl mx-auto mb-16">
+						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">O
+							que nossos usuários dizem</h2>
+					</div>
+
+					<div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+						<div class="bg-white p-8 rounded-2xl shadow-lg">
+							<div class="flex items-center mb-4">
+								<img
+									src="https://placehold.co/60x60/E0F2FE/0EA5E9?text=MR&amp;font=inter"
+									alt="Avatar de usuário" class="w-14 h-14 rounded-full mr-4" />
+								<div>
+									<p class="font-semibold text-lg text-gray-900">Mariana R.</p>
+									<p class="text-gray-500">Jogadora de Beach Tennis</p>
+								</div>
+							</div>
+							<p class="text-gray-600 text-lg italic leading-relaxed">
+								"Sempre era uma luta conseguir horário vago. Com o ReserveJá, eu
+								vejo todas as quadras da região e agendo em menos de um minuto.
+								Mudou minha rotina!"</p>
+						</div>
+						<div class="bg-white p-8 rounded-2xl shadow-lg">
+							<div class="flex items-center mb-4">
+								<img
+									src="https://placehold.co/60x60/D1FAE5/059669?text=CF&amp;font=inter"
+									alt="Avatar de usuário" class="w-14 h-14 rounded-full mr-4" />
+								<div>
+									<p class="font-semibold text-lg text-gray-900">Carlos F.</p>
+									<p class="text-gray-500">Capitão de Time (Futebol)</p>
+								</div>
+							</div>
+							<p class="text-gray-600 text-lg italic leading-relaxed">
+								"Organizar o futebol semanal da galera ficou muito mais fácil.
+								Reservo e divido o pagamento pelo app. Fantástico!"</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="cta" class="py-20 md:py-32 bg-primary-600 text-white">
+				<div class="container mx-auto max-w-7xl px-6 text-center">
+					<h2 class="text-3xl md:text-5xl font-bold mb-6">Pronto para
+						marcar seu próximo jogo?</h2>
+					<p class="text-lg text-primary-100 max-w-2xl mx-auto mb-10">
+						Junte-se a milhares de atletas que estão revolucionando a forma de
+						praticar esporte em nossas quadras.</p>
+					<a href="login.xhtml"
+						class="bg-white text-primary-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition duration-300 shadow-2xl transform hover:scale-105">
+						Criar conta gratuita </a>
+				</div>
+			</div>
+		</div>
+		<div class="bg-gray-900 text-gray-400 py-16">
+			<div
+				class="container mx-auto max-w-7xl px-6 grid md:grid-cols-4 gap-8">
+				<div>
+					<h4 class="text-xl font-bold text-white mb-4">
+						<span style="font-size: 1.2em; vertical-align: middle;">&#128197;</span>
+						ReserveJá
+					</h4>
+					<p class="text-gray-400">Facilitando o acesso ao esporte, uma
+						reserva de cada vez.</p>
+				</div>
+				<div>
+					<h5 class="text-lg font-semibold text-white mb-4">Navegação</h5>
+					<ul class="space-y-2">
+						<li><a href="#features" class="hover:text-primary-400">Recursos</a></li>
+						<li><a href="#how-it-works" class="hover:text-primary-400">Como
+								Funciona</a></li>
+						<li><a href="#testimonials" class="hover:text-primary-400">Depoimentos</a></li>
+						<li><a href="#" class="hover:text-primary-400">Sobre Nós</a></li>
+					</ul>
+				</div>
+				<div>
+					<h5 class="text-lg font-semibold text-white mb-4">Legal</h5>
+					<ul class="space-y-2">
+						<li><a href="#" class="hover:text-primary-400">Política
+								de Privacidade</a></li>
+						<li><a href="#" class="hover:text-primary-400">Termos de
+								Uso</a></li>
+					</ul>
+				</div>
+				<div>
+					<h5 class="text-lg font-semibold text-white mb-4">Siga-nos</h5>
+					<div class="flex space-x-4">
+						<a href="#" class="hover:text-primary-400" aria-label="Instagram">
+							<span class="w-6 h-6 font-bold">IG</span>
+						</a> <a href="#" class="hover:text-primary-400" aria-label="Facebook">
+							<span class="w-6 h-6 font-bold">FB</span>
+						</a> <a href="#" class="hover:text-primary-400" aria-label="Twitter">
+							<span class="w-6 h-6 font-bold">X</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div
+				class="container mx-auto max-w-7xl px-6 text-center mt-12 border-t border-gray-700 pt-8">
+				<p class="text-gray-500">
+					&copy; <span id="current-year"></span> ReserveJá. Todos os direitos
+					reservados.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+          const menuButton = document.getElementById('mobile-menu-button');
+          const mobileMenu = document.getElementById('mobile-menu');
+          const iconOpen = document.getElementById('menu-icon-open');
+          const iconClose = document.getElementById('menu-icon-close');
+
+          if (menuButton) {
+            menuButton.addEventListener('click', () => {
+              mobileMenu.classList.toggle('hidden');
+              iconOpen.classList.toggle('hidden');
+              iconClose.classList.toggle('hidden');
+            });
+          }
+
+          if (mobileMenu) {
+            mobileMenu.querySelectorAll('a').forEach(link => {
+              link.addEventListener('click', () => {
+                if (link.getAttribute('href').startsWith('#')) {
+                  mobileMenu.classList.add('hidden');
+                  iconOpen.classList.remove('hidden');
+                  iconClose.classList.add('hidden');
+                }
+              });
+            });
+          }
+
+          const yearSpan = document.getElementById('current-year');
+          if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+          }
+          
+        </script>
+
+</h:body>
+
+</html>

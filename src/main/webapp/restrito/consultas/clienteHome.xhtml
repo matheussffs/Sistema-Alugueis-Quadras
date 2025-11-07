@@ -1,0 +1,99 @@
+<ui:composition template="/templates/pagina.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Escolha um Esporte
+    </ui:define>
+
+    <ui:define name="content">
+    
+        <h:head>
+            <style type="text/css">
+                .modalidade-card {
+                    border: 1px solid #e0e0e0;
+                    border-radius: 12px;
+                    overflow: hidden; /* Para a imagem se ajustar */
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    transition: all 0.3s ease;
+                    text-decoration: none; /* Remove sublinhado do link */
+                    display: block;
+                    background: #fff;
+                    margin: 10px;
+                }
+                .modalidade-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                }
+                .card-imagem-container {
+                    height: 180px; /* Altura da imagem */
+                    width: 100%;
+                    background-color: #333;
+                    position: relative; /* Para o texto ficar por cima */
+                }
+                .card-imagem {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover; /* Faz a imagem cobrir o espaço */
+                }
+                .card-imagem-overlay {
+                    position: absolute;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    /* Gradiente para escurecer a base da imagem */
+                    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+                }
+                .card-titulo {
+                    position: absolute;
+                    bottom: 15px;
+                    left: 15px;
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: #ffffff;
+                    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+                }
+                .card-footer {
+                    padding: 15px 20px;
+                    text-align: center;
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: #059669; /* Verde (do seu tema) */
+                    background: #fdfdfd;
+                    border-top: 1px solid #f0f0f0;
+                }
+            </style>
+        </h:head>
+
+        <h:form id="formHome">
+            <p:panel header="Escolha o Esporte"
+                     styleClass="painel-custom-header" style="margin-top:20px;">
+                
+                <p:dataGrid var="modalidade" value="#{clienteHomeBean.modalidades}"
+                            columns="3" layout="grid" paginator="true" rows="6"
+                            emptyMessage="Nenhum esporte cadastrado no momento.">
+
+                    <p:link outcome="/restrito/cadastros/clienteReserva.xhtml" styleClass="modalidade-card">
+                        
+                        <f:param name="modalidadeId" value="#{modalidade.modId}" />
+
+                        <div class="card-imagem-container">
+                            <img src="https://placehold.co/400x300/10B981/FFFFFF?text=#{modalidade.modNome}&amp;font=inter"
+                                 alt="#{modalidade.modNome}" class="card-imagem" />
+                            <div class="card-imagem-overlay"></div>
+                            <div class="card-titulo">
+                                <h:outputText value="#{modalidade.modId}" />
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            Ver Quadras Disponíveis
+                        </div>
+                    </p:link>
+
+                </p:dataGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
