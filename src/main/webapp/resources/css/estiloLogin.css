@@ -1,6 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +13,8 @@ body {
     align-items: center;
     height: 100vh;
     width: 100%;
-	background: linear-gradient(90deg,rgba(6, 43, 112, 1) 0%, rgba(27, 156, 209, 1) 100%);
+    
+	background: linear-gradient(135deg,  #10B981 0%, #6EE7B7);
 }
 
 .divLogin {
@@ -54,7 +54,7 @@ body {
 }
 
 .btnLogin {
-    background-color: #007bff;
+    background-color: #10B981; 
     color: #fff;
     border: none;
     padding: 12px;
@@ -83,7 +83,7 @@ body {
 }
 
 p:commandLink {
-    color: #007bff;
+    color:  #10B981;
     text-decoration: none;
     font-size: 0.9em;
     margin-top: 10px;

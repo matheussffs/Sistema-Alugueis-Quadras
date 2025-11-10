@@ -56,15 +56,15 @@
 					</p:column>
 
 					<p:column headerText="Ações" width="160">
-						<p:commandButton icon="pi pi-pencil" title="Editar"
-							styleClass="p-button-rounded p-button-info p-mr-2"
+                        <p:commandButton icon="pi pi-pencil" title="Editar"
+							styleClass="p-button-rounded ui-button-success"
+                            style="margin-right: 8px;" 
 							actionListener="#{quadrasBean.selecionarQuadra(quadra)}"
 							update=":form2" oncomplete="PF('dlgQuadra').show()"
 							resetValues="true">
 						</p:commandButton>
-
-						<p:commandButton icon="pi pi-trash" title="Excluir"
-							styleClass="p-button-rounded p-button-danger"
+                        <p:commandButton icon="pi pi-trash" title="Excluir"
+							styleClass="p-button-rounded ui-button-danger"
 							actionListener="#{quadrasBean.excluirQuadra(quadra)}"
 							process="@this" update=":form1:quadrasTable :form1:mensagem">
 							<p:confirm header="Atenção!"
@@ -77,50 +77,71 @@
 			</p:panel>
 		</h:form>
 
-		<h:form id="form2">
+		<h:form id="form2" enctype="multipart/form-data">
 			<p:dialog header="Cadastro de Quadra" widgetVar="dlgQuadra"
 				modal="true" resizable="false" closable="true" width="500px"
 				id="dlgQuadra">
-				<h:panelGrid columns="2" cellpadding="5" style="width:100%">
+                
+                <h:panelGrid columns="1" cellpadding="5" style="width:100%">
 
 					<h:outputLabel for="nome" value="Nome:" />
 					<p:inputText id="nome" value="#{quadrasBean.crudObj.quaNome}"
-						required="true" maxlength="100" />
+						required="true" maxlength="100" style="width:100%"/>
 
 					<h:outputLabel for="descricao" value="Descrição:" />
 					<p:inputTextarea id="descricao"
 						value="#{quadrasBean.crudObj.quaDescricao}" rows="3"
-						autoResize="true" />
+						autoResize="true" style="width:100%"/>
 
-					<h:outputLabel for="modalidade" value="Modalidade:" />
-					<p:selectOneMenu id="modalidade"
-						value="#{quadrasBean.crudObj.modalidade}"
-						converter="omnifaces.SelectItemsConverter">
-						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
-							noSelectionOption="true" />
-						<f:selectItems value="#{quadrasBean.modalidades}" var="m"
-							itemLabel="#{m.modNome}"
-							itemValue="#{quadrasBean.modalidades[quadrasBean.modalidades.indexOf(m)]}" />
-					</p:selectOneMenu>
+                    <h:panelGrid columns="2" style="width:100%">
+                        <h:panelGroup style="width:100%">
+                            <h:outputLabel for="modalidade" value="Modalidade:" />
+                            <p:selectOneMenu id="modalidade"
+                                value="#{quadrasBean.modalidadeSelecionada}"
+                                required="true" style="width:100%;">
+                                
+                                <f:selectItem itemLabel="Selecione" itemValue="#{null}"
+                                    noSelectionOption="true" />
+                                
+                                <f:selectItem itemLabel="Futebol" itemValue="Futebol" />
+                                <f:selectItem itemLabel="Beach Tennis" itemValue="Beach Tennis" />
+                                <f:selectItem itemLabel="Padel" itemValue="Padel" />
+                                <f:selectItem itemLabel="Vôlei" itemValue="Volei" />
+                                <f:selectItem itemLabel="Tenis" itemValue="Tenis" />
+                            </p:selectOneMenu>
+                            </h:panelGroup>
 
-					<h:outputLabel for="valor" value="Valor por Hora:" />
-					<p:inputNumber id="valor"
-						value="#{quadrasBean.crudObj.quaValorHora}" mode="currency"
-						currency="BRL" />
+                        <h:panelGroup style="width:100%">
+                            <h:outputLabel for="valor" value="Valor por Hora:" />
+                            <p:inputNumber id="valor"
+                                value="#{quadrasBean.crudObj.quaValorHora}" mode="currency"
+                                currency="BRL" style="width:100%"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
 
-					<h:outputLabel for="ativa" value="Ativa:" />
+                    <h:outputLabel for="upload" value="Imagem da Quadra:" />
+                    <p:fileUpload id="upload" 
+                                  value="#{quadrasBean.arquivoImagem}" 
+                                  mode="simple" 
+                                  skinSimple="true"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                  sizeLimit="2097152" 
+                                  invalidSizeMessage="A imagem não pode ter mais de 2MB."
+                                  invalidFileMessage="Tipo de arquivo inválido (apenas .jpg, .png ou .gif)" />
+                    <h:outputLabel for="ativa" value="Ativa:" />
 					<p:selectBooleanCheckbox id="ativa"
 						value="#{quadrasBean.crudObj.quaAtiva}" />
 				</h:panelGrid>
 
 				<p:separator />
 
-				<p:commandButton value="Salvar" icon="pi pi-check"
+                <p:commandButton value="Salvar" icon="pi pi-check"
 					actionListener="#{quadrasBean.salvar}"
-					update=":form1:quadrasTable :form1:mensagem" process="@form"
-					oncomplete="if (!args.validationFailed) PF('dlgQuadra').hide()" />
+                    ajax="false" 
+					update=":form1:quadrasTable :form1:mensagem" />
+                    
 				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
-					onclick="PF('dlgQuadra').hide()" styleClass="p-button-secondary" />
+					onclick="PF('dlgQuadra').hide()" styleClass="ui-button-danger" />
 			</p:dialog>
 
 			<p:confirmDialog global="true">

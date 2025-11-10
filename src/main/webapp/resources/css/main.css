@@ -102,7 +102,7 @@ body .ui-panelgrid .ui-panelgrid-cell {
 }
 
 .ui-button {
-    background-color: #1a96cc !important;
+    background-color: #10B981 !important;
     border: none !important;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
 }
@@ -138,11 +138,11 @@ body .ui-tabs .ui-tabs-nav {
 }
 
 .ui-button-success {
-    background-color: #093e80 !important;
+    background-color: #0EA5E9 !important;
 }
 
 .ui-button-secondary {
-    background-color: #1a96cc !important;
+    background-color:  #10B981 !important;
 }
 
 .ui-chkbox .ui-chkbox-label {
@@ -150,7 +150,7 @@ body .ui-tabs .ui-tabs-nav {
 }
 
 body .ui-chkbox .ui-chkbox-box.ui-state-active {
-    background: #1a96cc !important;
+    background:  #10B981 !important;
 }
 
 .about-section {
@@ -222,7 +222,7 @@ body .ui-chkbox .ui-chkbox-box.ui-state-active {
     display: block;
     margin-bottom: 15px;
     font-size: 18px;
-    color: #007BFF;
+    color: #10B981;
     text-decoration: none;
 }
 

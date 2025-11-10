@@ -135,9 +135,7 @@ html {
 					class="text-gray-600 hover:text-primary-600 transition duration-300">Recursos</a>
 				<a href="#how-it-works"
 					class="text-gray-600 hover:text-primary-600 transition duration-300">Como
-					Funciona</a> <a href="#testimonials"
-					class="text-gray-600 hover:text-primary-600 transition duration-300">Depoimentos</a>
-				<a href="login.xhtml"
+					Funciona</a> <a href="login.xhtml"
 					class="bg-primary-500 text-white px-5 py-2 rounded-full font-medium hover:bg-primary-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
 					Entrar / Agendar </a>
 			</div>
@@ -158,9 +156,7 @@ html {
 					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Recursos</a>
 				<a href="#how-it-works"
 					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Como
-					Funciona</a> <a href="#testimonials"
-					class="block px-6 py-3 text-gray-600 hover:bg-primary-50">Depoimentos</a>
-				<a href="login.xhtml"
+					Funciona</a> <a href="login.xhtml"
 					class="block px-6 py-3 bg-primary-500 text-white text-center font-medium m-4 rounded-lg hover:bg-primary-600">
 					Entrar / Agendar </a>
 			</div>
@@ -187,11 +183,12 @@ html {
 					<div class="relative mt-16 md:mt-20">
 						<h:form>
 							<p:carousel value="#{landingPageBean.imagensQuadras}"
-								var="imagem" numVisible="1" numScroll="1" circular="true"
+								var="nomeImagem" numVisible="1" numScroll="1" circular="true"
 								autoplayInterval="5000" styleClass="hero-carousel">
 
-								<img src="#{imagem}" alt="Imagem da Quadra"
-									class="carousel-image" />
+								<img
+									src="#{request.contextPath}/resources/imagens/#{nomeImagem}"
+									alt="Imagem da Quadra" class="carousel-image" />
 
 							</p:carousel>
 						</h:form>
@@ -212,17 +209,6 @@ html {
 							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
 							<div
 								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
-								<span style="font-size: 1.5em;">&#128269;</span>
-							</div>
-							<h3 class="text-xl font-semibold text-gray-900 mb-3">Busca
-								Inteligente</h3>
-							<p class="text-gray-600">Filtre por esporte, localização,
-								horário e tipo de piso. Encontre exatamente o que procura.</p>
-						</div>
-						<div
-							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
-							<div
-								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
 								<span style="font-size: 1.5em;">&#128198;</span>
 							</div>
 							<h3 class="text-xl font-semibold text-gray-900 mb-3">Agenda
@@ -230,18 +216,7 @@ html {
 							<p class="text-gray-600">Veja apenas os horários disponíveis
 								e evite conflitos. Reserva confirmada na hora.</p>
 						</div>
-						<div
-							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
-							<div
-								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
-								<span style="font-size: 1.5em;">&#128179;</span>
-							</div>
-							<h3 class="text-xl font-semibold text-gray-900 mb-3">Pagamento
-								Online Seguro</h3>
-							<p class="text-gray-600">Pague sua reserva com Pix ou cartão
-								de crédito com total segurança e praticidade.</p>
 
-						</div>
 						<div
 							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
 							<div
@@ -253,17 +228,7 @@ html {
 							<p class="text-gray-600">Receba notificações sobre seus
 								próximos jogos e nunca mais esqueça um horário.</p>
 						</div>
-						<div
-							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
-							<div
-								class="bg-primary-100 text-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-5">
-								<span style="font-size: 1.5em;">&#128101;</span>
-							</div>
-							<h3 class="text-xl font-semibold text-gray-900 mb-3">Gestão
-								de Grupos</h3>
-							<p class="text-gray-600">Organize seus times, convide amigos
-								e divida o pagamento da reserva facilmente.</p>
-						</div>
+
 						<div
 							class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
 							<div
@@ -324,46 +289,7 @@ html {
 					</div>
 				</div>
 			</div>
-			<div id="testimonials" class="py-20 md:py-28 bg-gray-50">
-				<div class="container mx-auto max-w-7xl px-6">
-					<div class="text-center max-w-3xl mx-auto mb-16">
-						<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">O
-							que nossos usuários dizem</h2>
-					</div>
 
-					<div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-						<div class="bg-white p-8 rounded-2xl shadow-lg">
-							<div class="flex items-center mb-4">
-								<img
-									src="https://placehold.co/60x60/E0F2FE/0EA5E9?text=MR&amp;font=inter"
-									alt="Avatar de usuário" class="w-14 h-14 rounded-full mr-4" />
-								<div>
-									<p class="font-semibold text-lg text-gray-900">Mariana R.</p>
-									<p class="text-gray-500">Jogadora de Beach Tennis</p>
-								</div>
-							</div>
-							<p class="text-gray-600 text-lg italic leading-relaxed">
-								"Sempre era uma luta conseguir horário vago. Com o ReserveJá, eu
-								vejo todas as quadras da região e agendo em menos de um minuto.
-								Mudou minha rotina!"</p>
-						</div>
-						<div class="bg-white p-8 rounded-2xl shadow-lg">
-							<div class="flex items-center mb-4">
-								<img
-									src="https://placehold.co/60x60/D1FAE5/059669?text=CF&amp;font=inter"
-									alt="Avatar de usuário" class="w-14 h-14 rounded-full mr-4" />
-								<div>
-									<p class="font-semibold text-lg text-gray-900">Carlos F.</p>
-									<p class="text-gray-500">Capitão de Time (Futebol)</p>
-								</div>
-							</div>
-							<p class="text-gray-600 text-lg italic leading-relaxed">
-								"Organizar o futebol semanal da galera ficou muito mais fácil.
-								Reservo e divido o pagamento pelo app. Fantástico!"</p>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div id="cta" class="py-20 md:py-32 bg-primary-600 text-white">
 				<div class="container mx-auto max-w-7xl px-6 text-center">
 					<h2 class="text-3xl md:text-5xl font-bold mb-6">Pronto para
@@ -371,15 +297,17 @@ html {
 					<p class="text-lg text-primary-100 max-w-2xl mx-auto mb-10">
 						Junte-se a milhares de atletas que estão revolucionando a forma de
 						praticar esporte em nossas quadras.</p>
-					<a href="login.xhtml"
+					<a
+						href="#{request.contextPath}/publico/cadastros/cadastro-cliente.xhtml"
 						class="bg-white text-primary-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition duration-300 shadow-2xl transform hover:scale-105">
 						Criar conta gratuita </a>
 				</div>
 			</div>
 		</div>
+
 		<div class="bg-gray-900 text-gray-400 py-16">
 			<div
-				class="container mx-auto max-w-7xl px-6 grid md:grid-cols-4 gap-8">
+				class="container mx-auto max-w-7xl px-6 grid md:grid-cols-3 gap-8">
 				<div>
 					<h4 class="text-xl font-bold text-white mb-4">
 						<span style="font-size: 1.2em; vertical-align: middle;">&#128197;</span>
@@ -394,38 +322,16 @@ html {
 						<li><a href="#features" class="hover:text-primary-400">Recursos</a></li>
 						<li><a href="#how-it-works" class="hover:text-primary-400">Como
 								Funciona</a></li>
-						<li><a href="#testimonials" class="hover:text-primary-400">Depoimentos</a></li>
 						<li><a href="#" class="hover:text-primary-400">Sobre Nós</a></li>
 					</ul>
 				</div>
-				<div>
-					<h5 class="text-lg font-semibold text-white mb-4">Legal</h5>
-					<ul class="space-y-2">
-						<li><a href="#" class="hover:text-primary-400">Política
-								de Privacidade</a></li>
-						<li><a href="#" class="hover:text-primary-400">Termos de
-								Uso</a></li>
-					</ul>
-				</div>
-				<div>
-					<h5 class="text-lg font-semibold text-white mb-4">Siga-nos</h5>
-					<div class="flex space-x-4">
-						<a href="#" class="hover:text-primary-400" aria-label="Instagram">
-							<span class="w-6 h-6 font-bold">IG</span>
-						</a> <a href="#" class="hover:text-primary-400" aria-label="Facebook">
-							<span class="w-6 h-6 font-bold">FB</span>
-						</a> <a href="#" class="hover:text-primary-400" aria-label="Twitter">
-							<span class="w-6 h-6 font-bold">X</span>
-						</a>
-					</div>
-				</div>
+
 			</div>
 			<div
 				class="container mx-auto max-w-7xl px-6 text-center mt-12 border-t border-gray-700 pt-8">
-				<p class="text-gray-500">
-					&copy; <span id="current-year"></span> ReserveJá. Todos os direitos
-					reservados.
-				</p>
+				<p class="text-gray-500" />
+				&copy; <span id="current-year"></span> ReserveJá. Todos os direitos
+				reservados.
 			</div>
 		</div>
 	</div>
@@ -460,7 +366,6 @@ html {
           if (yearSpan) {
             yearSpan.textContent = new Date().getFullYear();
           }
-          
         </script>
 
 </h:body>

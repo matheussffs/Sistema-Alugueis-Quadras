@@ -13,35 +13,27 @@
 
 		<h:head>
             <style type="text/css">
-                /* Esta é a correção.
-                  O primeiro seletor (ex: .evento-confirmado) aplica a cor na visualização "Mês".
-                  O segundo seletor (ex: .evento-confirmado .fc-event-main) força a cor 
-                  na visualização "Semana" e "Dia", pintando o elemento filho.
-                */
                 .evento-confirmado,
                 .evento-confirmado .fc-event-main {
-                    background-color: #10B981 !important; /* Verde */
+                    background-color: #10B981 !important;
                     border-color: #059669 !important;
-                    color: #fff !important; /* Bônus: texto branco */
+                    color: #fff !important; 
                 }
                 
                 .evento-pendente,
                 .evento-pendente .fc-event-main {
-                    background-color: #F59E0B !important; /* Amarelo/Laranja */
+                    background-color: #F59E0B !important;
                     border-color: #D97706 !important;
-                    color: #fff !important; /* Bônus: texto branco */
+                    color: #fff !important; 
                 }
 
                 .evento-cancelado,
                 .evento-cancelado .fc-event-main {
-                    background-color: #EF4444 !important; /* Vermelho */
+                    background-color: #EF4444 !important;
                     border-color: #DC2626 !important;
-                    color: #fff !important; /* Bônus: texto branco */
+                    color: #fff !important;
                 }
                 
-                /* Este seletor aplica o texto riscado em TODAS as visualizações
-                   para eventos cancelados.
-                */
                 .evento-cancelado {
                     text-decoration: line-through !important;
                 }

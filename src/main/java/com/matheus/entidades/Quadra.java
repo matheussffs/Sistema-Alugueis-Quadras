@@ -36,6 +36,8 @@ public class Quadra implements Serializable {
 	private BigDecimal quaValorHora;
 	@Column(name = "qua_ativa", nullable = false)
 	private boolean quaAtiva = true;
+	@Column(name = "qua_caminho_imagem", length = 255)
+    private String quaCaminhoImagem;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "qua_modalidade_id", nullable = false)
 	private Modalidade modalidade;
@@ -89,6 +91,14 @@ public class Quadra implements Serializable {
 
 	public void setModalidade(Modalidade modalidade) {
 		this.modalidade = modalidade;
+	}
+
+	public String getQuaCaminhoImagem() {
+		return quaCaminhoImagem;
+	}
+
+	public void setQuaCaminhoImagem(String quaCaminhoImagem) {
+		this.quaCaminhoImagem = quaCaminhoImagem;
 	}
 
 	@Override
