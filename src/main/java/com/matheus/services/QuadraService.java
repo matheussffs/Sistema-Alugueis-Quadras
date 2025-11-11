@@ -6,7 +6,7 @@ import javax.persistence.Query;
 import com.matheus.entidades.Quadra; 
 import com.matheus.utils.FiltrosPesquisa;
 import java.util.ArrayList;
-import java.util.HashMap; // Importação necessária
+import java.util.HashMap; 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +24,11 @@ public class QuadraService extends BaseService<Quadra> {
     @Override
     protected List<FiltrosPesquisa> getFiltros(Map<String, Object> filtros) {
         List<FiltrosPesquisa> filtrosPesquisa = new ArrayList<>();
-        
         add(filtrosPesquisa, "u.quaNome = '?quaNome'", "quaNome", filtros.get("quaNome"));
-        
         add(filtrosPesquisa, "u.modalidade.modId = '?modalidadeId'", "modalidadeId", filtros.get("modalidadeId"));
-
         add(filtrosPesquisa, "u.quaAtiva = '?quaAtiva'", "quaAtiva", filtros.get("quaAtiva"));
+        
+        add(filtrosPesquisa, "u.quaId = '?quaId'", "quaId", filtros.get("quaId"));
         
         return filtrosPesquisa;
     }
@@ -52,6 +51,11 @@ public class QuadraService extends BaseService<Quadra> {
         if (filtros.get("quaAtiva") != null) { 
             jpql.append("AND u.quaAtiva = :quaAtiva ");
             parametros.put("quaAtiva", filtros.get("quaAtiva"));
+        }
+        
+        if (filtros.get("quaId") != null) { 
+            jpql.append("AND u.quaId = :quaId ");
+            parametros.put("quaId", filtros.get("quaId"));
         }
 
         Query query = customEntityManager.getEntityManager().createQuery(jpql.toString());

@@ -9,12 +9,9 @@ import com.matheus.services.QuadraService;
 import com.matheus.utils.JsfUtil;
 
 import org.primefaces.model.file.UploadedFile;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.DefaultStreamedContent;
+import java.io.ByteArrayInputStream;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -38,52 +35,40 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
     private QuadraService quadraService;
 
     @EJB
-    private ModalidadeService modalidadeService;
+    private ModalidadeService modalidadeService; 
 
     private boolean alterando;
     private List<Quadra> quadras;
-    
     private String modalidadeSelecionada;
-    
     private UploadedFile arquivoImagem; 
     
-    private static final String PATH_UPLOADS = "C:/quadras_uploads/";
-
     @PostConstruct
     public void montaRegistros() {
         quadras = quadraService.filtrar(new HashMap<>());
-        
-        new File(PATH_UPLOADS).mkdirs();
     }
 
     @Override
     public void criaObj() {
-        
         crudObj = new Quadra();
         crudObj.setQuaAtiva(true);
         alterando = false;
-        
-        modalidadeSelecionada = null; 
+        modalidadeSelecionada = null;
         arquivoImagem = null;
     }
 
     @Override
     public void salvar() {
-    
         try {
             if (modalidadeSelecionada == null || modalidadeSelecionada.isEmpty()) {
                 JsfUtil.warn("Selecione uma modalidade.");
                 return;
             }
             List<Modalidade> modLista = modalidadeService.buscarPorNome(modalidadeSelecionada);
-            
             if (modLista.isEmpty()) {
                 JsfUtil.error("Erro crítico: A modalidade '" + modalidadeSelecionada + "' não foi encontrada no banco.");
-                JsfUtil.warn("Verifique se as modalidades 'Futebol', 'Beach Tenis' e 'Padel' estão cadastradas no banco de dados.");
                 return;
             }
             crudObj.setModalidade(modLista.get(0));
-
         } catch (Exception e) {
             JsfUtil.error("Erro ao buscar modalidade: " + e.getMessage());
             return;
@@ -91,21 +76,14 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
         
         if (arquivoImagem != null && arquivoImagem.getSize() > 0) {
             try {
-                String nomeOriginal = arquivoImagem.getFileName();
-                String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf("."));
-                String nomeUnico = UUID.randomUUID().toString() + extensao;
-
-                InputStream input = arquivoImagem.getInputStream();
-                Path destino = new File(PATH_UPLOADS + nomeUnico).toPath();
-                Files.copy(input, destino, StandardCopyOption.REPLACE_EXISTING);
-
-                crudObj.setQuaCaminhoImagem(nomeUnico);
-                
+                crudObj.setQuaImagemDados(arquivoImagem.getContent());
+                crudObj.setQuaImagemTipo(arquivoImagem.getContentType());
             } catch (Exception e) {
-                JsfUtil.error("Erro ao salvar a imagem: " + e.getMessage());
+                JsfUtil.error("Erro ao ler a imagem: " + e.getMessage());
                 return;
             }
         }
+
         if (alterando) {
             quadraService.salvar(crudObj);
             JsfUtil.info("Quadra atualizada com sucesso!");
@@ -113,7 +91,6 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
             Map<String, Object> filtros = new HashMap<>();
             filtros.put("quaNome", crudObj.getQuaNome());
             List<Quadra> quadrasExistentes = quadraService.filtrar(filtros);
-
             if (quadrasExistentes.isEmpty()) {
                 quadraService.salvar(crudObj);
                 JsfUtil.info("Quadra cadastrada com sucesso!");
@@ -123,7 +100,6 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
                 return;
             }
         }
-
         quadras = quadraService.filtrar(new HashMap<>());
         criaObj();
     }
@@ -145,15 +121,32 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
     }
 
     public void selecionarQuadra(Quadra quadra) {
-        this.crudObj = quadra;
-        this.alterando = true;
         
-        if (quadra.getModalidade() != null) {
-            this.modalidadeSelecionada = quadra.getModalidade().getModNome();
+        try {
+            Map<String, Object> filtro = new HashMap<>();
+            filtro.put("quaId", quadra.getQuaId());
+            
+            List<Quadra> resultado = quadraService.filtrar(filtro);
+            
+            if (resultado == null || resultado.isEmpty()) {
+                JsfUtil.error("Erro ao carregar os dados da quadra.");
+                return;
+            }
+            
+            this.crudObj = resultado.get(0);
+            
+        } catch(Exception e) {
+            JsfUtil.error("Erro ao carregar dados da quadra: " + e.getMessage());
+            return;
+        }
+        
+        this.alterando = true;
+        if (this.crudObj.getModalidade() != null) {
+            this.modalidadeSelecionada = this.crudObj.getModalidade().getModNome();
         } else {
             this.modalidadeSelecionada = null;
         }
-        this.arquivoImagem = null; 
+        this.arquivoImagem = null;
     }
 
     public void excluirQuadra(Quadra quadraParaExcluir) {
@@ -166,41 +159,49 @@ public class QuadrasBean extends BaseCrud<Quadra> implements Serializable {
             JsfUtil.error("Erro ao excluir quadra: " + e.getMessage());
         }
     }
-
-    public Quadra getCrudObj() {
-        return crudObj;
-    }
-    public void setCrudObj(Quadra crudObj) {
-        this.crudObj = crudObj;
-    }
-    public boolean isAlterando() {
-        return alterando;
-    }
-    public void setAlterando(boolean alterando) {
-        this.alterando = alterando;
-    }
-    public List<Quadra> getQuadras() {
-        return quadras;
-    }
-    public void setQuadras(List<Quadra> quadras) {
-        this.quadras = quadras;
-    }
-
-    public String getModalidadeSelecionada() {
-        return modalidadeSelecionada;
-    }
-    public void setModalidadeSelecionada(String modalidadeSelecionada) {
-        this.modalidadeSelecionada = modalidadeSelecionada;
+    
+    public StreamedContent getImagemParaVisualizar() {
+        if (crudObj != null && crudObj.getQuaImagemDados() != null) {
+            return DefaultStreamedContent.builder()
+                    .contentType(crudObj.getQuaImagemTipo())
+                    .stream(() -> new ByteArrayInputStream(crudObj.getQuaImagemDados()))
+                    .build();
+        }
+        return null;
     }
     
-    public UploadedFile getArquivoImagem() {
-        return arquivoImagem;
+    public Quadra getCrudObj() { 
+        return crudObj; 
     }
-    public void setArquivoImagem(UploadedFile arquivoImagem) {
-        this.arquivoImagem = arquivoImagem;
+    public void setCrudObj(Quadra crudObj) { 
+        this.crudObj = crudObj; 
+    }
+    public boolean isAlterando() { 
+        return alterando; 
+    }
+    public void setAlterando(boolean alterando) { 
+        this.alterando = alterando; 
+    }
+    public List<Quadra> getQuadras() { 
+        return quadras; 
+    }
+    public void setQuadras(List<Quadra> quadras) { 
+        this.quadras = quadras; 
+    }
+    public String getModalidadeSelecionada() { 
+        return modalidadeSelecionada; 
+    }
+    public void setModalidadeSelecionada(String modalidadeSelecionada) { 
+        this.modalidadeSelecionada = modalidadeSelecionada; 
+    }
+    public UploadedFile getArquivoImagem() { 
+        return arquivoImagem; 
+    }
+    public void setArquivoImagem(UploadedFile arquivoImagem) { 
+        this.arquivoImagem = arquivoImagem; 
     }
     
-    public List<Modalidade> getModalidades() {
+    public List<Modalidade> getModalidades() { 
         return null;
     }
 }

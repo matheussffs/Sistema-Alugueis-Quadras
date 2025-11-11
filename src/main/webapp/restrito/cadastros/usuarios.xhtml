@@ -44,23 +44,24 @@
 
 					<p:column headerText="Situação" sortBy="#{usuario.userAtivo}"
 						width="120" style="text-align: center;">
-						<i
-							class="pi #{usuario.userAtivo ? 'pi-check-circle' : 'pi-times-circle'}"
-							style="color: #{usuario.userAtivo ? 'green' : 'red'}; font-size: 1.2rem;" />
+						<h:outputText value="Ativa" rendered="#{usuario.userAtivo}"
+							style="color: green; font-weight: bold;" />
+						<h:outputText value="Inativa" rendered="#{not usuario.userAtivo}"
+							style="color: red; font-weight: bold;" />
 					</p:column>
 
 					<p:column headerText="Ações" width="160"
 						style="text-align: center;">
 						<p:commandButton icon="pi pi-pencil" title="Editar"
-							styleClass="p-button-rounded p-button-info p-mr-2"
+							styleClass="p-button-rounded ui-button-success"
+							style="margin-right: 8px;"
 							actionListener="#{usuarioBean.selecionarUsuario(usuario)}"
 							update=":form2" oncomplete="PF('dlgUsuario').show()"
 							resetValues="true" />
 						<p:commandButton icon="pi pi-trash" title="Excluir"
-							styleClass="p-button-rounded p-button-danger"
+							styleClass="p-button-rounded ui-button-danger"
 							actionListener="#{usuarioBean.excluirUsuario(usuario)}"
-							process="@this"
-							update=":form1:usuariosTable :form1:mensagem">
+							process="@this" update=":form1:usuariosTable :form1:mensagem">
 							<p:confirm header="Atenção!"
 								message="Deseja realmente excluir este usuário?"
 								icon="pi pi-exclamation-triangle" />
@@ -102,7 +103,7 @@
 						requiredMessage="O perfil é obrigatório.">
 						<f:selectItem itemLabel="Selecione..." itemValue="#{null}"
 							noSelectionOption="true" />
-						<f:selectItems value="#{perfilBean.perfis}" var="p"
+						<f:selectItems value="#{usuarioBean.perfis}" var="p"
 							itemLabel="#{p.perfDesc}" itemValue="#{p}" />
 					</p:selectOneMenu>
 
@@ -113,13 +114,12 @@
 
 				<p:separator />
 
-				<p:commandButton value="Salvar" icon="pi pi-check"
-					actionListener="#{usuarioBean.salvar}"
-					update=":form1:usuariosTable :form1:mensagem"
-					process="@form"
-					oncomplete="if (!args.validationFailed) PF('dlgUsuario').hide()" />
-				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
-					onclick="PF('dlgUsuario').hide()" styleClass="p-button-secondary" />
+				<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+					<p:commandButton value="Salvar" icon="pi pi-check"
+						actionListener="#{usuarioBean.salvar}"
+						update=":form1:usuariosTable :form1:mensagem" process="@form"
+						oncomplete="if (!args.validationFailed) PF('dlgUsuario').hide()" />
+				</h:panelGroup>
 			</p:dialog>
 
 			<p:confirmDialog global="true">

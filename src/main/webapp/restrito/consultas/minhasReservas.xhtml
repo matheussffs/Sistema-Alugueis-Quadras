@@ -53,7 +53,7 @@
                     <p:column headerText="Ações" width="120" style="text-align: center;">
                         <p:commandButton value="Cancelar"
                                          icon="pi pi-times"
-                                         styleClass="ui-button-danger ui-button-outlined"
+                                         styleClass="ui-button-danger"
                                          actionListener="#{minhasReservasBean.cancelar(reserva)}"
                                          process="@this"
                                          update=":formMinhasReservas:tabelaReservas :formMinhasReservas:mensagem"
@@ -64,8 +64,7 @@
                                        icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </p:column>
-
-                </p:dataTable>
+                    </p:dataTable>
             </p:panel>
             
             <p:confirmDialog global="true">

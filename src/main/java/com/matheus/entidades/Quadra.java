@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -36,11 +38,17 @@ public class Quadra implements Serializable {
 	private BigDecimal quaValorHora;
 	@Column(name = "qua_ativa", nullable = false)
 	private boolean quaAtiva = true;
-	@Column(name = "qua_caminho_imagem", length = 255)
-    private String quaCaminhoImagem;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "qua_modalidade_id", nullable = false)
 	private Modalidade modalidade;
+	
+	@Lob
+    @Basic(fetch=FetchType.LAZY)
+    @Column(name="qua_imagem_dados")
+    private byte[] quaImagemDados;
+    
+    @Column(name="qua_imagem_tipo", length = 50)
+    private String quaImagemTipo;
 
 	public Quadra() {
 	}
@@ -92,13 +100,21 @@ public class Quadra implements Serializable {
 	public void setModalidade(Modalidade modalidade) {
 		this.modalidade = modalidade;
 	}
-
-	public String getQuaCaminhoImagem() {
-		return quaCaminhoImagem;
+	
+	public byte[] getQuaImagemDados() {
+		return quaImagemDados;
 	}
 
-	public void setQuaCaminhoImagem(String quaCaminhoImagem) {
-		this.quaCaminhoImagem = quaCaminhoImagem;
+	public void setQuaImagemDados(byte[] quaImagemDados) {
+		this.quaImagemDados = quaImagemDados;
+	}
+
+	public String getQuaImagemTipo() {
+		return quaImagemTipo;
+	}
+
+	public void setQuaImagemTipo(String quaImagemTipo) {
+		this.quaImagemTipo = quaImagemTipo;
 	}
 
 	@Override
