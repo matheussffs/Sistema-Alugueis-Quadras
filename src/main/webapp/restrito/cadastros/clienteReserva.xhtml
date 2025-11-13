@@ -16,11 +16,27 @@
 .card-quadra {
 	margin: 8px;
 	border: 1px solid #ddd;
-	...
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	transition: all 0.3s ease;
+	text-decoration: none;
+	display: block;
+	background: #fff;
 }
 
-.card-quadra .ui-panel-titlebar { ...
-	
+.card-quadra:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-quadra .ui-panel-titlebar {
+	background-color: #059669;
+	color: #ffffff;
+	font-weight: bold;
+	border-bottom: 1px solid #047857;
+	font-size: 14px;
+	padding: 8px 12px;
 }
 
 .card-quadra .ui-panel-content {
@@ -30,7 +46,10 @@
 .quadra-imagem {
 	width: 100%;
 	height: 120px;
-	...
+	object-fit: cover;
+	background-color: #f0f0f0;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
 }
 
 .quadra-info {
@@ -41,11 +60,36 @@
 .quadra-preco {
 	font-size: 16px;
 	font-weight: bold;
-	...
+	color: #047857;
 }
 
 .quadra-botao {
 	padding: 0 12px 12px 12px;
+}
+
+/* CSS Adicional para o novo layout do Dialog */
+.dialog-layout {
+	display: flex; /* Ativa o Flexbox */
+	width: 100%;
+}
+
+.dialog-coluna-esquerda {
+	flex: 5; /* 50% da largura */
+	padding-right: 20px;
+}
+
+.dialog-coluna-direita {
+	flex: 5; /* 50% da largura */
+	padding-left: 20px;
+	border-left: 1px solid #eee;
+	/* Truque do Flexbox para empurrar o valor para baixo */
+	display: flex;
+	flex-direction: column;
+}
+
+.dialog-info-valor {
+	margin-top: auto; /* EMPURRA PARA O FIM */
+	text-align: right;
 }
 </style>
 		</h:head>
@@ -97,69 +141,69 @@
 		</h:form>
 
 		<p:dialog header="Confirmar Agendamento" widgetVar="dlgReserva"
-			modal="true" resizable="false" closable="true" width="650px">
+			modal="true" resizable="false" closable="true" width="700px">
 
 			<h:form id="formDialogReserva">
 
-				<h:panelGrid columns="3" columnClasses="ui-g-3,ui-g-5,ui-g-4"
-					style="width:100%;" cellpadding="10">
+				<div class="dialog-layout"
+					rendered="#{not empty clienteReservaBean.quadraSelecionada}">
 
-					<h:panelGroup>
+					<div class="dialog-coluna-esquerda">
+
 						<img
 							src="https://placehold.co/400x200/10B981/FFFFFF?text=#{clienteReservaBean.quadraSelecionada.quaNome}&amp;font=inter"
 							alt="#{clienteReservaBean.quadraSelecionada.quaNome}"
-							style="width: 100%; border-radius: 8px;" />
-
-						<h:panelGrid columns="2" style="width:100%; margin-top: 10px;">
-							<h:outputText value="Quadra:" style="font-weight:bold;" />
-							<h:outputText
-								value="#{clienteReservaBean.quadraSelecionada.quaNome}" />
-
-							<h:outputText value="Valor (1 hora):" style="font-weight:bold;" />
-							<h:outputText
-								value="#{clienteReservaBean.quadraSelecionada.quaValorHora}"
-								style="font-size: 1.1em; font-weight:bold; color: #059669;">
-								<f:convertNumber type="currency" currencySymbol="R$" />
-							</h:outputText>
-						</h:panelGrid>
-					</h:panelGroup>
-
-					<h:panelGrid columns="1" style="width:100%;"
-						columnClasses="ui-g-12">
+							style="width: 100%; border-radius: 8px; margin-bottom: 20px;" />
 
 						<h:outputLabel for="data" value="Data da Reserva:"
 							style="font-weight:bold;" />
 						<p:calendar id="data"
 							value="#{clienteReservaBean.dataSelecionada}"
 							pattern="dd/MM/yyyy" mask="true" required="true" mindate="today"
-							showOn="button" style="width:100%;" />
+							style="width:100%;" />
 
 						<h:outputLabel for="horario" value="Horário de Início:"
-							style="font-weight:bold; margin-top:10px;" />
+							style="font-weight:bold; margin-top:15px;" />
 						<p:selectOneMenu id="horario"
 							value="#{clienteReservaBean.horarioSelecionado}" required="true"
 							requiredMessage="O horário é obrigatório." style="width:100%;">
 							<f:selectItem itemLabel="Selecione o horário..."
 								itemValue="#{null}" noSelectionOption="true" />
-							<f:selectItems value="#{clienteReservaBean.horariosParaEscolha}"
+							<f:selectItems value="#{clienteReservaBean.horariosDisponiveis}"
 								var="h" itemLabel="#{h}" itemValue="#{h}" />
 						</p:selectOneMenu>
+					</div>
 
-					</h:panelGrid>
+					<div class="dialog-coluna-direita">
 
-					<h:panelGroup />
+						<h:outputText
+							value="#{clienteReservaBean.quadraSelecionada.quaNome}"
+							style="font-size: 1.8em; font-weight: 700; color: #333; display: block;" />
 
-				</h:panelGrid>
+						<h:outputText
+							value="#{clienteReservaBean.quadraSelecionada.quaDescricao}"
+							style="font-size: 1.1em; color: #666; display: block; margin-top: 5px; margin-bottom: 25px;" />
+
+						<div class="dialog-info-valor">
+							<h:outputText value="Valor (1 hora):"
+								style="font-weight:bold; font-size: 1.2em; color: #555; vertical-align: middle;" />
+							<h:outputText
+								value="#{clienteReservaBean.quadraSelecionada.quaValorHora}"
+								style="font-size: 2.0em; font-weight:bold; color: #059669; margin-left: 10px; vertical-align: middle;">
+								<f:convertNumber type="currency" currencySymbol="R$ " />
+							</h:outputText>
+						</div>
+					</div>
+
+				</div>
 
 				<p:separator />
 
-				<p:commandButton value="Confirmar Reserva" icon="pi pi-check"
-					action="#{clienteReservaBean.salvarReserva}" process="@form"
-					update="@form :formReserva:mensagem" />
-
-				<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
-					onclick="PF('dlgReserva').hide()" styleClass="p-button-secondary" />
-
+				<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+					<p:commandButton value="Confirmar Reserva" icon="pi pi-check"
+						action="#{clienteReservaBean.salvarReserva}" process="@form"
+						update="@form :formReserva:mensagem" />
+				</h:panelGroup>
 			</h:form>
 		</p:dialog>
 
