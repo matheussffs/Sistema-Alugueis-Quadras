@@ -47,6 +47,10 @@ public class Usuarios implements Serializable {
 	private Date userDataCadastro;
 	@Column(name = "user_ativo")
 	private boolean userAtivo = true;
+	@Column(name = "user_notifica_whatsapp", nullable = false)
+    private boolean userNotificaWhatsapp = false;
+    @Column(name = "user_notifica_antecedencia_min", nullable = false)
+    private Integer userNotificaAntecedenciaMin = 60;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_perf_id", nullable = false)
@@ -125,6 +129,22 @@ public class Usuarios implements Serializable {
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
+	}
+
+	public boolean isUserNotificaWhatsapp() {
+		return userNotificaWhatsapp;
+	}
+
+	public void setUserNotificaWhatsapp(boolean userNotificaWhatsapp) {
+		this.userNotificaWhatsapp = userNotificaWhatsapp;
+	}
+
+	public Integer getUserNotificaAntecedenciaMin() {
+		return userNotificaAntecedenciaMin;
+	}
+
+	public void setUserNotificaAntecedenciaMin(Integer userNotificaAntecedenciaMin) {
+		this.userNotificaAntecedenciaMin = userNotificaAntecedenciaMin;
 	}
 
 	@Override

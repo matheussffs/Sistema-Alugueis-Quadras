@@ -67,28 +67,26 @@
 	padding: 0 12px 12px 12px;
 }
 
-/* CSS Adicional para o novo layout do Dialog */
 .dialog-layout {
-	display: flex; /* Ativa o Flexbox */
+	display: flex;
 	width: 100%;
 }
 
 .dialog-coluna-esquerda {
-	flex: 5; /* 50% da largura */
+	flex: 5;
 	padding-right: 20px;
 }
 
 .dialog-coluna-direita {
-	flex: 5; /* 50% da largura */
+	flex: 5;
 	padding-left: 20px;
 	border-left: 1px solid #eee;
-	/* Truque do Flexbox para empurrar o valor para baixo */
 	display: flex;
 	flex-direction: column;
 }
 
 .dialog-info-valor {
-	margin-top: auto; /* EMPURRA PARA O FIM */
+	margin-top: auto;
 	text-align: right;
 }
 </style>
@@ -160,10 +158,14 @@
 						<p:calendar id="data"
 							value="#{clienteReservaBean.dataSelecionada}"
 							pattern="dd/MM/yyyy" mask="true" required="true" mindate="today"
-							style="width:100%;" />
+							style="width:100%;">
+							<p:ajax event="dateSelect"
+								listener="#{clienteReservaBean.onDateSelect}" update="horario" />
+						</p:calendar>
 
 						<h:outputLabel for="horario" value="Horário de Início:"
 							style="font-weight:bold; margin-top:15px;" />
+
 						<p:selectOneMenu id="horario"
 							value="#{clienteReservaBean.horarioSelecionado}" required="true"
 							requiredMessage="O horário é obrigatório." style="width:100%;">
@@ -207,5 +209,41 @@
 			</h:form>
 		</p:dialog>
 
+		<p:dialog header="Lembrete de Reserva" widgetVar="dlgNotificacao"
+			modal="true" resizable="false" closable="false" width="450px">
+
+			<h:form id="formNotificacao">
+				<div style="padding: 10px; text-align: center;">
+					<i class="pi pi-whatsapp"
+						style="font-size: 3rem; color: #25D366; margin-bottom: 15px;"></i>
+
+					<h:outputText
+						value="Deseja receber um lembrete no WhatsApp antes do seu jogo?"
+						style="display: block; font-size: 1.1em; margin-bottom: 25px;" />
+
+					<h:panelGrid columns="2" style="margin-bottom: 25px; width: 100%;">
+						<h:outputLabel for="antecedencia" value="Me avise com:" />
+						<p:selectOneMenu id="antecedencia"
+							value="#{clienteReservaBean.antecedenciaSelecionada}"
+							required="true" style="width: 100%;">
+							<f:selectItem itemLabel="15 minutos" itemValue="15" />
+							<f:selectItem itemLabel="30 minutos" itemValue="30" />
+							<f:selectItem itemLabel="1 hora (Padrão)" itemValue="60" />
+							<f:selectItem itemLabel="2 horas" itemValue="120" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<p:commandButton value="Salvar Preferência" icon="pi pi-check"
+						actionListener="#{clienteReservaBean.ativarNotificacoes}"
+						styleClass="p-button-success" style="margin-right: 8px;"
+						update=":formReserva:mensagem"
+						oncomplete="PF('dlgNotificacao').hide()" />
+
+					<p:commandButton value="Agora não" icon="pi pi-times" type="button"
+						styleClass="p-button-secondary ui-button-outlined"
+						onclick="PF('dlgNotificacao').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

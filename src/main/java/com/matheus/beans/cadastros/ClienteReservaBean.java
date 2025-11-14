@@ -1,5 +1,7 @@
 package com.matheus.beans.cadastros;
 
+import com.matheus.services.UsuariosService;
+import javax.ejb.EJB;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import com.matheus.utils.StringUtil;
 import com.matheus.beans.UsuarioLogadoBean;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -27,8 +28,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Matheus Fassicollo
- */
+*
+* @author Matheus Fassicollo
+*/
 @Named
 @ViewScoped
 public class ClienteReservaBean implements Serializable {
@@ -39,36 +41,35 @@ public class ClienteReservaBean implements Serializable {
 	private ReservaService reservaService;
 	@EJB
 	private QuadraService quadraService;
+	@EJB
+	private UsuariosService usuariosService; 
+
 	@Inject
 	private UsuarioLogadoBean usuarioLogadoBean;
 
 	private List<Quadra> quadrasDisponiveis;
 	private Reserva novaReserva;
 	private Quadra quadraSelecionada;
-
 	private Date dataSelecionada;
 	private String horarioSelecionado;
-
 	private List<String> todosOsHorarios;
 	private List<String> horariosDisponiveis;
+
+	private Integer antecedenciaSelecionada = 60; 
 
 	@PostConstruct
 	public void init() {
 		carregarTodosOsHorarios();
-
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String modalidadeIdParam = params.get("modalidadeId");
-
 		HashMap<String, Object> filtros = new HashMap<>();
 		filtros.put("quaAtiva", true);
-
 		if (modalidadeIdParam != null && !modalidadeIdParam.isEmpty()) {
 			try {
 				filtros.put("modalidadeId", Integer.valueOf(modalidadeIdParam));
 			} catch (NumberFormatException e) {
 			}
 		}
-
 		quadrasDisponiveis = quadraService.filtrar(filtros);
 	}
 
@@ -94,37 +95,27 @@ public class ClienteReservaBean implements Serializable {
 
 	private void atualizarHorariosDisponiveis() {
 		horariosDisponiveis = new ArrayList<>();
-
 		if (dataSelecionada == null || quadraSelecionada == null) {
 			return;
 		}
-
 		Calendar calData = Calendar.getInstance();
 		calData.setTime(dataSelecionada);
 		int ano = calData.get(Calendar.YEAR);
 		int mes = calData.get(Calendar.MONTH);
 		int dia = calData.get(Calendar.DAY_OF_MONTH);
-
 		for (String slot : todosOsHorarios) {
-
 			int horaInicio = Integer.parseInt(slot.substring(0, 2));
-
 			Reserva reservaFantasma = new Reserva();
 			reservaFantasma.setQuadra(quadraSelecionada);
-
 			Calendar calUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			calUTC.set(ano, mes, dia, horaInicio, 0, 0);
 			calUTC.set(Calendar.MILLISECOND, 0);
 			Date dtInicio = calUTC.getTime();
-
 			calUTC.add(Calendar.HOUR_OF_DAY, 1);
 			Date dtFim = calUTC.getTime();
-
 			reservaFantasma.setResDtInicio(dtInicio);
 			reservaFantasma.setResDtFim(dtFim);
-
 			boolean ocupado = reservaService.existeConflito(reservaFantasma);
-
 			if (!ocupado) {
 				horariosDisponiveis.add(slot);
 			}
@@ -151,7 +142,6 @@ public class ClienteReservaBean implements Serializable {
 			int mes = calData.get(Calendar.MONTH);
 			int dia = calData.get(Calendar.DAY_OF_MONTH);
 			int horaInicio = Integer.parseInt(horarioSelecionado.substring(0, 2));
-
 			Calendar calUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			calUTC.set(ano, mes, dia, horaInicio, 0, 0);
 			calUTC.set(Calendar.MILLISECOND, 0);
@@ -168,15 +158,17 @@ public class ClienteReservaBean implements Serializable {
 
 			if (reservaService.existeConflito(novaReserva)) {
 				JsfUtil.error("Horário Ocupado!");
-				JsfUtil.warn(
-						"Este horário foi reservado por outra pessoa enquanto você decidia. Por favor, escolha outro.");
+				JsfUtil.warn("Este horário foi reservado por outra pessoa. Por favor, escolha outro.");
 				atualizarHorariosDisponiveis();
 				return;
 			}
 
 			reservaService.salvar(novaReserva);
 			JsfUtil.info("Reserva efetuada com sucesso!");
+
 			JsfUtil.pfHideDialog("dlgReserva");
+
+			JsfUtil.pfShowDialog("dlgNotificacao");
 
 			novaReserva = null;
 			quadraSelecionada = null;
@@ -186,6 +178,23 @@ public class ClienteReservaBean implements Serializable {
 		} catch (Exception e) {
 			JsfUtil.error("Erro ao salvar a reserva: " + e.getMessage());
 			e.printStackTrace();
+		}
+	}
+
+	public void ativarNotificacoes() {
+		try {
+			Usuarios clienteLogado = usuarioLogadoBean.getUsuarioLogado();
+
+			clienteLogado.setUserNotificaWhatsapp(true);
+			clienteLogado.setUserNotificaAntecedenciaMin(this.antecedenciaSelecionada);
+
+			usuariosService.salvar(clienteLogado);
+
+			JsfUtil.info("Preferência salva!");
+			JsfUtil.pfHideDialog("dlgNotificacao");
+
+		} catch (Exception e) {
+			JsfUtil.error("Erro ao salvar preferência: " + e.getMessage());
 		}
 	}
 
@@ -223,5 +232,13 @@ public class ClienteReservaBean implements Serializable {
 
 	public List<String> getHorariosDisponiveis() {
 		return horariosDisponiveis;
+	}
+
+	public Integer getAntecedenciaSelecionada() {
+		return antecedenciaSelecionada;
+	}
+
+	public void setAntecedenciaSelecionada(Integer antecedenciaSelecionada) {
+		this.antecedenciaSelecionada = antecedenciaSelecionada;
 	}
 }

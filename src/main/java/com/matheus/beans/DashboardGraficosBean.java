@@ -3,8 +3,8 @@ package com.matheus.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -30,10 +30,10 @@ import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.title.Title;
 
 /**
- * @author Matheus Fassicollo
  * 
+ * @author Matheus Fassicollo
  */
-@Named
+@Named("dashboardGraficosBean")
 @ViewScoped
 public class DashboardGraficosBean implements Serializable {
 
@@ -62,6 +62,7 @@ public class DashboardGraficosBean implements Serializable {
 	private void createFaturamentoModel() {
 		faturamentoModel = new LineChartModel();
 		ChartData data = new ChartData();
+
 		LineChartDataSet dataSet = new LineChartDataSet();
 		dataSet.setLabel("Faturamento R$ (Confirmado)");
 		dataSet.setFill(true);
@@ -76,6 +77,7 @@ public class DashboardGraficosBean implements Serializable {
 				+ "GROUP BY MONTH(res_dt_inicio), mes " + "ORDER BY MONTH(res_dt_inicio)");
 
 		List<Object[]> resultados = q.getResultList();
+
 		for (Object[] resultado : resultados) {
 			labels.add((String) resultado[0]);
 			values.add(((Number) resultado[1]).doubleValue());
@@ -91,6 +93,7 @@ public class DashboardGraficosBean implements Serializable {
 		title.setDisplay(true);
 		title.setText("Faturamento Mensal (Este Ano)");
 		options.setTitle(title);
+
 		faturamentoModel.setOptions(options);
 	}
 
@@ -159,6 +162,12 @@ public class DashboardGraficosBean implements Serializable {
 		title.setDisplay(true);
 		title.setText("Reservas por Esporte");
 		options.setTitle(title);
+
+		Legend legend = new Legend();
+		legend.setDisplay(true);
+		legend.setPosition("top");
+		options.setLegend(legend);
+
 		modalidadesModel.setOptions(options);
 	}
 
@@ -175,10 +184,10 @@ public class DashboardGraficosBean implements Serializable {
 		List<Object[]> resultados = q.getResultList();
 
 		Map<String, String> statusColorMap = new HashMap<>();
-		statusColorMap.put("CANCELADA", "rgb(239, 68, 68)"); 
-		statusColorMap.put("CONFIRMADA", "rgb(22, 163, 74)"); 
-		statusColorMap.put("PENDENTE", "rgb(245, 158, 11)"); 
-		statusColorMap.put("CONCLUIDA", "rgb(107, 114, 128)"); 
+		statusColorMap.put("CANCELADA", "rgb(239, 68, 68)");
+		statusColorMap.put("CONFIRMADA", "rgb(22, 163, 74)");
+		statusColorMap.put("PENDENTE", "rgb(245, 158, 11)");
+		statusColorMap.put("CONCLUIDA", "rgb(107, 114, 128)");
 
 		List<String> colors = new ArrayList<>();
 
@@ -249,7 +258,6 @@ public class DashboardGraficosBean implements Serializable {
 	private void createPeakHoursModel() {
 		peakHoursModel = new BarChartModel();
 		ChartData data = new ChartData();
-
 		BarChartDataSet barDataSet = new BarChartDataSet();
 		barDataSet.setLabel("Nº de Reservas");
 		barDataSet.setBackgroundColor("rgba(245, 158, 11, 0.6)");
@@ -279,7 +287,6 @@ public class DashboardGraficosBean implements Serializable {
 		title.setDisplay(true);
 		title.setText("Horários de Pico (Total de Reservas)");
 		options.setTitle(title);
-
 		peakHoursModel.setOptions(options);
 	}
 

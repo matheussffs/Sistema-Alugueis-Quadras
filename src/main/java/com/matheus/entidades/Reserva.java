@@ -55,6 +55,9 @@ public class Reserva implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "res_dt_criacao", insertable = false, updatable = false)
     private Date resDtCriacao;
+    
+    @Column(name = "res_lembrete_enviado", nullable = false)
+    private boolean resLembreteEnviado = false;
 
     public Reserva() {
     }
@@ -123,7 +126,15 @@ public class Reserva implements Serializable {
         this.resDtCriacao = resDtCriacao;
     }
 
-    @Override
+    public boolean isResLembreteEnviado() {
+		return resLembreteEnviado;
+	}
+
+	public void setResLembreteEnviado(boolean resLembreteEnviado) {
+		this.resLembreteEnviado = resLembreteEnviado;
+	}
+
+	@Override
     public int hashCode() {
         return Objects.hash(resId);
     }
