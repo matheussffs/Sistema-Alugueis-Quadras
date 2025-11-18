@@ -4,18 +4,18 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-	<div
-		style="background-color: #fff; color: #333; display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #ddd;">
+
+	<div class="topbar-custom">
 
 		<div style="display: flex; align-items: center; flex-grow: 1;">
-			<div style="font-weight: bold; font-size: 22px; margin-left: 15px;">
-				Aluguel Quadras</div>
+
+			<div class="topbar-title">Flash Quadras</div>
 
 			<p:menubar autoDisplay="true" hideDelay="1000"
 				rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'ADMIN'}"
-				style="background:transparent; border:none; color:#333; margin-left:30px;">
+				style="background:transparent; border:none; margin-left:30px;">
 
-				<p:menuitem value="Dashboard" icon="pi pi-fw pi-home" ajax="false"
+				<p:menuitem value="Home" icon="pi pi-fw pi-home" ajax="false"
 					url="#{request.contextPath}/restrito/consultas/dashboard.xhtml" />
 
 				<p:menuitem value="Agenda (Reservas)" icon="pi pi-fw pi-calendar"
@@ -39,7 +39,7 @@
 
 			<p:menubar autoDisplay="true" hideDelay="1000"
 				rendered="#{gerBean.usuarioLogado and usuarioLogadoBean.usuarioLogado.perfil.perfDesc.toUpperCase() == 'CLIENTE'}"
-				style="background:transparent; border:none; color:#333; margin-left:30px;">
+				style="background:transparent; border:none; margin-left:30px;">
 
 				<p:menuitem value="Fazer Reserva" icon="pi pi-fw pi-calendar-plus"
 					ajax="false"
@@ -59,13 +59,15 @@
 			<p:commandButton value="Login" icon="pi pi-fw pi-sign-in"
 				action="#{loginBean.redirecionarParaLogin()}"
 				rendered="#{not gerBean.usuarioLogado}" ajax="false"
-				styleClass="ui-button-info" />
+				styleClass="topbar-logout-btn" />
 
 			<h:panelGroup rendered="#{gerBean.usuarioLogado}">
 				<p:outputLabel value="#{usuarioLogadoBean.usuarioLogado.userNome}"
-					style="margin-right:10px; font-weight:bold;" />
+					style="margin-right:10px; font-weight:bold; color: white;" />
+
 				<p:commandButton value="Sair" icon="pi pi-fw pi-sign-out"
-					action="#{gerBean.logout}" ajax="false" styleClass="ui-button-info" />
+					action="#{gerBean.logout}" ajax="false"
+					styleClass="topbar-logout-btn" />
 			</h:panelGroup>
 		</div>
 	</div>

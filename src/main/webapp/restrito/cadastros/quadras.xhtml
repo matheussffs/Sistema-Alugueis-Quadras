@@ -52,21 +52,21 @@
 					</p:column>
 
 					<p:column headerText="Situação" width="120">
-						<h:outputText value="Ativa" rendered="#{quadra.quaAtiva}" 
-                                      style="color: green; font-weight: bold;" />
-						<h:outputText value="Inativa" rendered="#{not quadra.quaAtiva}" 
-                                      style="color: red; font-weight: bold;" />
+						<h:outputText value="Ativa" rendered="#{quadra.quaAtiva}"
+							style="color: green; font-weight: bold;" />
+						<h:outputText value="Inativa" rendered="#{not quadra.quaAtiva}"
+							style="color: red; font-weight: bold;" />
 					</p:column>
 
 					<p:column headerText="Ações" width="160">
-                        <p:commandButton icon="pi pi-pencil" title="Editar"
+						<p:commandButton icon="pi pi-pencil" title="Editar"
 							styleClass="p-button-rounded ui-button-success"
-                            style="margin-right: 8px;" 
+							style="margin-right: 8px;"
 							actionListener="#{quadrasBean.selecionarQuadra(quadra)}"
 							update=":form2" oncomplete="PF('dlgQuadra').show()"
 							resetValues="true">
 						</p:commandButton>
-                        <p:commandButton icon="pi pi-trash" title="Excluir"
+						<p:commandButton icon="pi pi-trash" title="Excluir"
 							styleClass="p-button-rounded ui-button-danger"
 							actionListener="#{quadrasBean.excluirQuadra(quadra)}"
 							process="@this" update=":form1:quadrasTable :form1:mensagem">
@@ -84,74 +84,86 @@
 			<p:dialog header="Cadastro de Quadra" widgetVar="dlgQuadra"
 				modal="true" resizable="false" closable="true" width="500px"
 				id="dlgQuadra">
-                
-                <h:panelGrid columns="1" cellpadding="5" style="width:100%">
+
+				<h:panelGrid columns="1" cellpadding="5" style="width:100%">
 
 					<h:outputLabel for="nome" value="Nome:" />
 					<p:inputText id="nome" value="#{quadrasBean.crudObj.quaNome}"
-						required="true" maxlength="100" style="width:100%"/>
+						required="true" maxlength="100" style="width:100%" />
 
 					<h:outputLabel for="descricao" value="Descrição:" />
 					<p:inputTextarea id="descricao"
 						value="#{quadrasBean.crudObj.quaDescricao}" rows="3"
-						autoResize="true" style="width:100%"/>
+						autoResize="true" style="width:100%" />
 
-                    <h:panelGrid columns="2" style="width:100%">
-                        <h:panelGroup style="width:100%">
-                            <h:outputLabel for="modalidade" value="Modalidade:" />
-                            <p:selectOneMenu id="modalidade"
-                                value="#{quadrasBean.modalidadeSelecionada}"
-                                required="true" style="width:100%;">
-                                
-                                <f:selectItem itemLabel="Selecione" itemValue="#{null}"
-                                    noSelectionOption="true" />
-                                
-                                <f:selectItem itemLabel="Futebol" itemValue="Futebol" />
-                                <f:selectItem itemLabel="Beach Tennis" itemValue="Beach Tennis" />
-                                <f:selectItem itemLabel="Padel" itemValue="Padel" />
-                                <f:selectItem itemLabel="Vôlei" itemValue="Volei" />
-                                <f:selectItem itemLabel="Tenis" itemValue="Tenis" />
-                            </p:selectOneMenu>
-                            </h:panelGroup>
+					<h:panelGrid columns="2" style="width:100%">
+						<h:panelGroup style="width:100%">
+							<h:outputLabel for="modalidade" value="Modalidade:" />
+							<p:selectOneMenu id="modalidade"
+								value="#{quadrasBean.modalidadeSelecionada}" required="true"
+								style="width:100%;">
 
-                        <h:panelGroup style="width:100%">
-                            <h:outputLabel for="valor" value="Valor por Hora:" />
-                            <p:inputNumber id="valor"
-                                value="#{quadrasBean.crudObj.quaValorHora}" mode="currency"
-                                currency="BRL" style="width:100%"/>
-                        </h:panelGroup>
-                    </h:panelGrid>
+								<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+									noSelectionOption="true" />
 
-                    <h:outputLabel for="upload" value="Imagem da Quadra:" />
-                    <p:fileUpload id="upload" 
-                                  value="#{quadrasBean.arquivoImagem}" 
-                                  mode="simple" 
-                                  label="Selecionar"
-                                  icon="pi pi-upload"
-                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                  sizeLimit="2097152" 
-                                  invalidSizeMessage="A imagem não pode ter mais de 2MB."
-                                  invalidFileMessage="Tipo de arquivo inválido (apenas .jpg, .png ou .gif)" />
-                    
-                    <h:panelGrid columns="2" 
-                                 styleClass="ui-panelgrid-blank" 
-                                 cellpadding="0"
-                                 style="vertical-align: middle;">
-                        <h:outputLabel for="ativa" value="Ativa:" 
-                                       style="margin-right: 10px;"/>
-                        <p:selectBooleanCheckbox id="ativa"
-                            value="#{quadrasBean.crudObj.quaAtiva}" />
-                    </h:panelGrid>
+								<f:selectItem itemLabel="Futebol" itemValue="Futebol" />
+								<f:selectItem itemLabel="Beach Tennis" itemValue="Beach Tennis" />
+								<f:selectItem itemLabel="Padel" itemValue="Padel" />
+								<f:selectItem itemLabel="Vôlei" itemValue="Volei" />
+								<f:selectItem itemLabel="Tênis" itemValue="Tenis" />
+								<f:selectItem itemLabel="Futsal" itemValue="Futsal" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+
+						<h:panelGroup style="width:100%">
+							<h:outputLabel for="valor" value="Valor por Hora:" />
+							<p:inputNumber id="valor"
+								value="#{quadrasBean.crudObj.quaValorHora}" mode="currency"
+								currency="BRL" style="width:100%" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:outputLabel for="upload" value="Imagem da Quadra:"
+						style="margin-top: 10px; display:block;" />
+
+					<h:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+						cellpadding="0">
+
+						<p:fileUpload id="upload" value="#{quadrasBean.arquivoImagem}"
+							mode="simple" skinSimple="true" label="Selecionar"
+							icon="pi pi-upload" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+							sizeLimit="2097152"
+							invalidSizeMessage="A imagem não pode ter mais de 2MB."
+							invalidFileMessage="Tipo de arquivo inválido" />
+
+						<p:commandButton icon="pi pi-eye" title="Visualizar Imagem Atual"
+							styleClass="ui-button-info" process="@this"
+							update=":form2:imagemDialogContainer"
+							oncomplete="PF('dlgImagem').show()"
+							rendered="#{quadrasBean.alterando and not empty quadrasBean.crudObj.quaImagemDados}"
+							style="margin-left: 10px; height: 32px;" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" styleClass="ui-panelgrid-blank"
+						cellpadding="0" style="vertical-align: middle;">
+						<h:outputLabel for="ativa" value="Ativa:"
+							style="margin-right: 10px;" />
+						<p:selectBooleanCheckbox id="ativa"
+							value="#{quadrasBean.crudObj.quaAtiva}" />
+					</h:panelGrid>
+
 				</h:panelGrid>
 
 				<p:separator />
 
-                <h:panelGroup layout="block" style="text-align: right; width: 100%;">
-                    <p:commandButton value="Salvar" icon="pi pi-check"
-                        actionListener="#{quadrasBean.salvar}" ajax="false"
-                        update=":form1:quadrasTable :form1:mensagem"
-                        /> </h:panelGroup>
-                </p:dialog>
+				<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+					<p:commandButton value="Salvar" icon="pi pi-check"
+						actionListener="#{quadrasBean.salvar}" ajax="false"
+						update=":form1:quadrasTable :form1:mensagem"
+						style="margin-right: 8px;" />
+
+				</h:panelGroup>
+			</p:dialog>
 
 			<p:confirmDialog global="true">
 				<p:commandButton value="Sim" type="button"
@@ -159,7 +171,24 @@
 				<p:commandButton value="Não" type="button"
 					styleClass="ui-confirmdialog-no" icon="pi pi-times" />
 			</p:confirmDialog>
-			
+
+			<p:dialog header="Imagem Atual da Quadra" widgetVar="dlgImagem"
+				modal="true" resizable="false" closable="true" fitViewport="true">
+
+				<h:panelGroup id="imagemDialogContainer" layout="block"
+					style="text-align: center;">
+
+					<p:graphicImage value="#{quadrasBean.imagemParaVisualizar}"
+						alt="Imagem da quadra" stream="false"
+						style="max-width: 600px; max-height: 600px; border-radius: 8px;"
+						cache="false"
+						rendered="#{not empty quadrasBean.crudObj.quaImagemDados}" />
+
+					<h:outputText value="Nenhuma imagem cadastrada para esta quadra."
+						rendered="#{empty quadrasBean.crudObj.quaImagemDados}" />
+				</h:panelGroup>
+			</p:dialog>
+
 		</h:form>
 	</ui:define>
 </ui:composition>

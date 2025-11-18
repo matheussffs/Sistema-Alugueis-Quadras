@@ -1,36 +1,36 @@
 package com.matheus.beans.cadastros;
 
-import com.matheus.services.UsuariosService;
-import javax.ejb.EJB;
-import java.util.Calendar;
-import java.util.TimeZone;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import org.primefaces.event.SelectEvent;
-
 import com.matheus.entidades.Quadra;
 import com.matheus.entidades.Reserva;
 import com.matheus.entidades.Usuarios;
 import com.matheus.services.QuadraService;
 import com.matheus.services.ReservaService;
+import com.matheus.services.UsuariosService;
+import com.matheus.beans.UsuarioLogadoBean;
 import com.matheus.utils.JsfUtil;
 import com.matheus.utils.StringUtil;
-import com.matheus.beans.UsuarioLogadoBean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import java.io.ByteArrayInputStream;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
+import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.util.Date;
+import org.primefaces.event.SelectEvent;
 
-/**
-*
-* @author Matheus Fassicollo
-*/
 @Named
 @ViewScoped
 public class ClienteReservaBean implements Serializable {
@@ -42,8 +42,7 @@ public class ClienteReservaBean implements Serializable {
 	@EJB
 	private QuadraService quadraService;
 	@EJB
-	private UsuariosService usuariosService; 
-
+	private UsuariosService usuariosService;
 	@Inject
 	private UsuarioLogadoBean usuarioLogadoBean;
 
@@ -54,8 +53,7 @@ public class ClienteReservaBean implements Serializable {
 	private String horarioSelecionado;
 	private List<String> todosOsHorarios;
 	private List<String> horariosDisponiveis;
-
-	private Integer antecedenciaSelecionada = 60; 
+	private Integer antecedenciaSelecionada = 60;
 
 	@PostConstruct
 	public void init() {
@@ -75,10 +73,15 @@ public class ClienteReservaBean implements Serializable {
 
 	private void carregarTodosOsHorarios() {
 		todosOsHorarios = new ArrayList<>();
-		for (int i = 8; i <= 21; i++) {
-			todosOsHorarios.add(String.format("%02d:00 às %02d:00", i, i + 1));
+		for (int i = 0; i <= 23; i++) {
+			int horaFim = i + 1;
+			if (i == 23) {
+				horaFim = 0;
+			}
+			todosOsHorarios.add(String.format("%02d:00 às %02d:00", i, horaFim));
 		}
 	}
+
 
 	public void selecionarQuadra(Quadra quadra) {
 		this.quadraSelecionada = quadra;
@@ -95,14 +98,15 @@ public class ClienteReservaBean implements Serializable {
 
 	private void atualizarHorariosDisponiveis() {
 		horariosDisponiveis = new ArrayList<>();
-		if (dataSelecionada == null || quadraSelecionada == null) {
+		if (dataSelecionada == null || quadraSelecionada == null)
 			return;
-		}
+
 		Calendar calData = Calendar.getInstance();
 		calData.setTime(dataSelecionada);
 		int ano = calData.get(Calendar.YEAR);
 		int mes = calData.get(Calendar.MONTH);
 		int dia = calData.get(Calendar.DAY_OF_MONTH);
+
 		for (String slot : todosOsHorarios) {
 			int horaInicio = Integer.parseInt(slot.substring(0, 2));
 			Reserva reservaFantasma = new Reserva();
@@ -115,8 +119,8 @@ public class ClienteReservaBean implements Serializable {
 			Date dtFim = calUTC.getTime();
 			reservaFantasma.setResDtInicio(dtInicio);
 			reservaFantasma.setResDtFim(dtFim);
-			boolean ocupado = reservaService.existeConflito(reservaFantasma);
-			if (!ocupado) {
+
+			if (!reservaService.existeConflito(reservaFantasma)) {
 				horariosDisponiveis.add(slot);
 			}
 		}
@@ -125,17 +129,15 @@ public class ClienteReservaBean implements Serializable {
 	public void salvarReserva() {
 		try {
 			if (quadraSelecionada == null || dataSelecionada == null || StringUtil.isNullOrEmpty(horarioSelecionado)) {
-				JsfUtil.warn("Preencha todos os campos: Quadra, Data e Horário.");
+				JsfUtil.warn("Preencha todos os campos.");
 				return;
 			}
-
 			Usuarios clienteLogado = usuarioLogadoBean.getUsuarioLogado();
 			if (clienteLogado == null) {
 				JsfUtil.error("Sua sessão expirou.");
 				JsfUtil.redirect("/SistemaAlugueis/login.xhtml");
 				return;
 			}
-
 			Calendar calData = Calendar.getInstance();
 			calData.setTime(dataSelecionada);
 			int ano = calData.get(Calendar.YEAR);
@@ -158,25 +160,19 @@ public class ClienteReservaBean implements Serializable {
 
 			if (reservaService.existeConflito(novaReserva)) {
 				JsfUtil.error("Horário Ocupado!");
-				JsfUtil.warn("Este horário foi reservado por outra pessoa. Por favor, escolha outro.");
 				atualizarHorariosDisponiveis();
 				return;
 			}
-
 			reservaService.salvar(novaReserva);
 			JsfUtil.info("Reserva efetuada com sucesso!");
-
 			JsfUtil.pfHideDialog("dlgReserva");
-
 			JsfUtil.pfShowDialog("dlgNotificacao");
 
 			novaReserva = null;
 			quadraSelecionada = null;
 			dataSelecionada = null;
 			horarioSelecionado = null;
-
 		} catch (Exception e) {
-			JsfUtil.error("Erro ao salvar a reserva: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -184,18 +180,35 @@ public class ClienteReservaBean implements Serializable {
 	public void ativarNotificacoes() {
 		try {
 			Usuarios clienteLogado = usuarioLogadoBean.getUsuarioLogado();
-
 			clienteLogado.setUserNotificaWhatsapp(true);
 			clienteLogado.setUserNotificaAntecedenciaMin(this.antecedenciaSelecionada);
-
 			usuariosService.salvar(clienteLogado);
-
 			JsfUtil.info("Preferência salva!");
 			JsfUtil.pfHideDialog("dlgNotificacao");
-
 		} catch (Exception e) {
 			JsfUtil.error("Erro ao salvar preferência: " + e.getMessage());
 		}
+	}
+
+	public StreamedContent getImagemQuadra(Integer id) {
+		if (id != null) {
+			try {
+				HashMap<String, Object> filtro = new HashMap<>();
+				filtro.put("quaId", id);
+				List<Quadra> lista = quadraService.filtrar(filtro);
+
+				if (!lista.isEmpty()) {
+					Quadra q = lista.get(0);
+					if (q.getQuaImagemDados() != null) {
+						return DefaultStreamedContent.builder().contentType(q.getQuaImagemTipo())
+								.stream(() -> new ByteArrayInputStream(q.getQuaImagemDados())).build();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return new DefaultStreamedContent();
 	}
 
 	public List<Quadra> getQuadrasDisponiveis() {

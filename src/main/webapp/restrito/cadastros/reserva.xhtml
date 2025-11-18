@@ -12,32 +12,48 @@
 	<ui:define name="content">
 
 		<h:head>
-            <style type="text/css">
-                .evento-confirmado,
-                .evento-confirmado .fc-event-main {
-                    background-color: #10B981 !important;
-                    border-color: #059669 !important;
-                    color: #fff !important; 
-                }
-                
-                .evento-pendente,
-                .evento-pendente .fc-event-main {
-                    background-color: #F59E0B !important;
-                    border-color: #D97706 !important;
-                    color: #fff !important; 
-                }
+			<style type="text/css">
+.evento-confirmado, .evento-confirmado .fc-event-main {
+	background-color: #10B981 !important;
+	border-color: #059669 !important;
+	color: #fff !important;
+}
 
-                .evento-cancelado,
-                .evento-cancelado .fc-event-main {
-                    background-color: #EF4444 !important;
-                    border-color: #DC2626 !important;
-                    color: #fff !important;
-                }
-                
-                .evento-cancelado {
-                    text-decoration: line-through !important;
-                }
-            </style>
+.evento-pendente, .evento-pendente .fc-event-main {
+	background-color: #F59E0B !important;
+	border-color: #D97706 !important;
+	color: #fff !important;
+}
+
+.evento-cancelado, .evento-cancelado .fc-event-main {
+	background-color: #EF4444 !important;
+	border-color: #DC2626 !important;
+	color: #fff !important;
+	text-decoration: line-through !important;
+}
+
+.fc .fc-button-primary {
+	background-color: #10B981 !important;
+	border-color: #059669 !important;
+	color: #ffffff !important;
+	font-weight: bold;
+}
+
+.fc .fc-button-primary:hover {
+	background-color: #059669 !important;
+	border-color: #047857 !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active
+	{
+	background-color: #047857 !important;
+	border-color: #047857 !important;
+}
+
+.fc .fc-button-primary:focus {
+	box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.5) !important;
+}
+</style>
 		</h:head>
 
 		<h:form id="formAgenda">
@@ -68,7 +84,15 @@
 						<h:outputText value="Cliente:" />
 						<h:outputText
 							value="#{reservaBean.reservaSelecionada.usuario.userNome}"
-							style="font-weight:bold;" />
+							style="font-weight:bold; font-size: 1.1em;" />
+
+						<h:outputText value="E-mail:" />
+						<h:outputText
+							value="#{reservaBean.reservaSelecionada.usuario.userEmail}" />
+
+						<h:outputText value="CPF:" />
+						<h:outputText
+							value="#{reservaBean.reservaSelecionada.usuario.userCpf}" />
 
 						<h:outputText value="Quadra:" />
 						<h:outputText
@@ -98,7 +122,7 @@
 
 						<h:outputText value="Status Atual:" />
 						<h:outputText value="#{reservaBean.reservaSelecionada.resStatus}"
-							style="font-weight:bold;" />
+							style="font-weight:bold; font-size: 1.1em; color: #{reservaBean.reservaSelecionada.resStatus == 'CONFIRMADA' ? '#10B981' : (reservaBean.reservaSelecionada.resStatus == 'CANCELADA' ? '#EF4444' : '#F59E0B')};" />
 
 					</h:panelGrid>
 					<p:separator />

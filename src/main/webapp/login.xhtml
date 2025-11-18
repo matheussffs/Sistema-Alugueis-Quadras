@@ -5,7 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
-	<title>Login</title>
+	<title>Login - Flash Quadras</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<h:outputStylesheet library="css" name="main.css" />
@@ -13,6 +13,127 @@
 	<h:outputScript library="js" name="primefacesLocale.js" />
 
 	<style>
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+body {
+	background-color: #10B981;
+	background-image: linear-gradient(135deg, #065F46 0%, #10B981 100%);
+	background-size: cover;
+	background-attachment: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.home-link {
+	position: absolute;
+	top: 30px;
+	left: 40px;
+	text-decoration: none;
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	z-index: 1000;
+	transition: opacity 0.2s, transform 0.2s;
+}
+
+.home-link:hover {
+	opacity: 0.9;
+	transform: translateY(-2px);
+}
+
+.logo-text {
+	font-size: 1.5rem;
+	font-weight: 700;
+	font-family: 'Inter', sans-serif;
+	margin-left: 8px;
+}
+
+@media ( max-width : 600px) {
+	.home-link {
+		top: 15px;
+		left: 15px;
+	}
+	.logo-text {
+		font-size: 1.2rem;
+	}
+}
+
+.divBody {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	flex-grow: 1;
+}
+
+.divLogin {
+	background-color: #FFFFFF;
+	padding: 2.5rem;
+	border-radius: 12px;
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+	max-width: 400px;
+	width: 90%;
+	text-align: center;
+}
+
+.btnLogin {
+	background-color: #10B981 !important;
+	color: #fff !important;
+	border: none !important;
+	padding: 12px;
+	border-radius: 25px !important;
+	cursor: pointer;
+	font-size: 1em;
+	font-weight: bold;
+	transition: background-color 0.4s ease, transform 0.4s ease !important;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.btnLogin:hover {
+	background-color: #059669 !important;
+	transform: scale(1.02);
+}
+
+.ui-button.btnLogin {
+	background: #10B981 !important;
+	border: none !important;
+	color: #FFFFFF !important;
+	border-radius: 25px !important;
+}
+
+.btnCadastro {
+	width: 100%;
+	background-color: #10B981 !important;
+	border-color: #10B981 !important;
+	color: #fff !important;
+	border-radius: 25px !important;
+	padding: 12px;
+	font-weight: bold;
+	font-size: 1em;
+	transition: background-color 0.4s ease, transform 0.4s ease !important;
+}
+
+.btnCadastro:hover {
+	background-color: #059669 !important;
+	border-color: #059669 !important;
+	transform: scale(1.02);
+	text-decoration: none;
+}
+
+.ui-button.btnCadastro {
+	background: #10B981 !important;
+	border: none !important;
+	color: #FFFFFF !important;
+	border-radius: 25px !important;
+}
 div ~ a {
 	text-align: center;
 }
@@ -22,26 +143,49 @@ div ~ a {
 	width: 100%;
 }
 
-.btnCadastro {
-	width: 100%;
-	background-color: #6c757d;
-	border-color: #6c757d;
-}
 .link-esqueci {
 	display: block;
 	text-align: center;
 	margin-top: 15px;
 	font-size: 14px;
-	color: #007bff;
+	color: #0EA5E9;
 	text-decoration: none;
+}
+
+.link-esqueci:hover {
+	text-decoration: underline;
+}
+
+.tituloTexto {
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: #333;
+	margin-bottom: 20px;
+	display: block;
+}
+
+.padPg.pgWidth {
+	padding: 0;
+	margin-bottom: 15px;
+}
+
+.padPg.pgWidth:last-of-type {
+	margin-bottom: 0;
 }
 </style>
 </h:head>
 
 <h:body>
+
+	<a href="#{request.contextPath}/landing.xhtml" class="home-link"> <span
+		style="font-size: 2rem; vertical-align: middle;">&#128197;</span> <span
+		class="logo-text">Flash Quadras</span>
+	</a>
+
 	<div class="divBody">
 		<h:form id="form1">
-			<p:growl id="mensagem" life="5000" />
+
+			<p:growl id="mensagem" life="5000" autoUpdate="true" />
 
 			<div class="divLogin">
 				<p:panelGrid columns="1" layout="grid">
@@ -72,7 +216,7 @@ div ~ a {
 					<p:panelGrid columns="1" styleClass="padPg pgWidth">
 						<p:button value="Cadastrar-se" icon="pi pi-user-plus"
 							outcome="/publico/cadastros/cadastro-cliente.xhtml"
-							styleClass="btnLogin" />
+							styleClass="btnCadastro ui-button-secondary" />
 					</p:panelGrid>
 
 					<p:commandLink value="Esqueci minha senha"

@@ -38,7 +38,8 @@
 						<h:outputText value="#{usuario.userEmail}" />
 					</p:column>
 
-					<p:column headerText="CPF" sortBy="#{usuario.userCpf}">
+					<p:column headerText="CPF" sortBy="#{usuario.userCpf}"
+						filterBy="#{usuario.userCpf}">
 						<h:outputText value="#{usuario.userCpf}" />
 					</p:column>
 

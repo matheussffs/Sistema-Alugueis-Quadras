@@ -89,6 +89,18 @@
 	margin-top: auto;
 	text-align: right;
 }
+
+.btn-sim {
+	background-color: #25D366 !important;
+	border-color: #25D366 !important;
+	font-weight: bold;
+}
+
+.btn-nao {
+	background-color: #EF4444 !important; 
+	border-color: #EF4444 !important;
+	font-weight: bold;
+}
 </style>
 		</h:head>
 
@@ -107,9 +119,15 @@
 					<div class="card-quadra">
 						<p:panel header="#{quadra.quaNome}">
 
-							<img
-								src="https://placehold.co/400x200/10B981/FFFFFF?text=#{quadra.quaNome}&amp;font=inter"
-								alt="#{quadra.quaNome}" class="quadra-imagem" />
+							<p:graphicImage
+								value="#{clienteReservaBean.getImagemQuadra(quadra.quaId)}"
+								styleClass="quadra-imagem" stream="false"
+								rendered="#{not empty quadra.quaImagemDados}" />
+
+							<p:graphicImage
+								value="https://placehold.co/400x200/10B981/FFFFFF?text=#{quadra.quaNome}"
+								styleClass="quadra-imagem"
+								rendered="#{empty quadra.quaImagemDados}" />
 
 							<div class="quadra-info">
 								<h:panelGrid columns="2" style="width:100%">
@@ -142,16 +160,19 @@
 			modal="true" resizable="false" closable="true" width="700px">
 
 			<h:form id="formDialogReserva">
-
 				<div class="dialog-layout"
 					rendered="#{not empty clienteReservaBean.quadraSelecionada}">
 
 					<div class="dialog-coluna-esquerda">
-
-						<img
-							src="https://placehold.co/400x200/10B981/FFFFFF?text=#{clienteReservaBean.quadraSelecionada.quaNome}&amp;font=inter"
-							alt="#{clienteReservaBean.quadraSelecionada.quaNome}"
-							style="width: 100%; border-radius: 8px; margin-bottom: 20px;" />
+						<p:graphicImage
+							value="#{clienteReservaBean.getImagemQuadra(clienteReservaBean.quadraSelecionada.quaId)}"
+							style="width: 100%; border-radius: 8px; margin-bottom: 20px; height: 150px; object-fit: cover;"
+							stream="false"
+							rendered="#{not empty clienteReservaBean.quadraSelecionada.quaImagemDados}" />
+						<p:graphicImage
+							value="https://placehold.co/400x200/10B981/FFFFFF?text=#{clienteReservaBean.quadraSelecionada.quaNome}"
+							style="width: 100%; border-radius: 8px; margin-bottom: 20px; height: 150px; object-fit: cover;"
+							rendered="#{empty clienteReservaBean.quadraSelecionada.quaImagemDados}" />
 
 						<h:outputLabel for="data" value="Data da Reserva:"
 							style="font-weight:bold;" />
@@ -165,7 +186,6 @@
 
 						<h:outputLabel for="horario" value="Horário de Início:"
 							style="font-weight:bold; margin-top:15px;" />
-
 						<p:selectOneMenu id="horario"
 							value="#{clienteReservaBean.horarioSelecionado}" required="true"
 							requiredMessage="O horário é obrigatório." style="width:100%;">
@@ -177,15 +197,12 @@
 					</div>
 
 					<div class="dialog-coluna-direita">
-
 						<h:outputText
 							value="#{clienteReservaBean.quadraSelecionada.quaNome}"
 							style="font-size: 1.8em; font-weight: 700; color: #333; display: block;" />
-
 						<h:outputText
 							value="#{clienteReservaBean.quadraSelecionada.quaDescricao}"
 							style="font-size: 1.1em; color: #666; display: block; margin-top: 5px; margin-bottom: 25px;" />
-
 						<div class="dialog-info-valor">
 							<h:outputText value="Valor (1 hora):"
 								style="font-weight:bold; font-size: 1.2em; color: #555; vertical-align: middle;" />
@@ -196,11 +213,8 @@
 							</h:outputText>
 						</div>
 					</div>
-
 				</div>
-
 				<p:separator />
-
 				<h:panelGroup layout="block" style="text-align: right; width: 100%;">
 					<p:commandButton value="Confirmar Reserva" icon="pi pi-check"
 						action="#{clienteReservaBean.salvarReserva}" process="@form"
@@ -221,29 +235,32 @@
 						value="Deseja receber um lembrete no WhatsApp antes do seu jogo?"
 						style="display: block; font-size: 1.1em; margin-bottom: 25px;" />
 
-					<h:panelGrid columns="2" style="margin-bottom: 25px; width: 100%;">
-						<h:outputLabel for="antecedencia" value="Me avise com:" />
+					<h:panelGrid columns="2" style="margin: 0 auto 25px auto;">
+						<h:outputLabel for="antecedencia" value="Me avise com:"
+							style="font-weight: bold; margin-right: 10px;" />
 						<p:selectOneMenu id="antecedencia"
 							value="#{clienteReservaBean.antecedenciaSelecionada}"
-							required="true" style="width: 100%;">
+							required="true" style="width: 180px;">
 							<f:selectItem itemLabel="15 minutos" itemValue="15" />
 							<f:selectItem itemLabel="30 minutos" itemValue="30" />
-							<f:selectItem itemLabel="1 hora (Padrão)" itemValue="60" />
+							<f:selectItem itemLabel="1 hora" itemValue="60" />
 							<f:selectItem itemLabel="2 horas" itemValue="120" />
 						</p:selectOneMenu>
 					</h:panelGrid>
+					<div
+						style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+						<p:commandButton value="Sim, me avise" icon="pi pi-check"
+							actionListener="#{clienteReservaBean.ativarNotificacoes}"
+							styleClass="btn-sim" update=":formReserva:mensagem"
+							oncomplete="PF('dlgNotificacao').hide()" />
 
-					<p:commandButton value="Salvar Preferência" icon="pi pi-check"
-						actionListener="#{clienteReservaBean.ativarNotificacoes}"
-						styleClass="p-button-success" style="margin-right: 8px;"
-						update=":formReserva:mensagem"
-						oncomplete="PF('dlgNotificacao').hide()" />
-
-					<p:commandButton value="Agora não" icon="pi pi-times" type="button"
-						styleClass="p-button-secondary ui-button-outlined"
-						onclick="PF('dlgNotificacao').hide()" />
+						<p:commandButton value="Não, obrigado" icon="pi pi-times"
+							type="button" styleClass="btn-nao"
+							onclick="PF('dlgNotificacao').hide()" />
+					</div>
 				</div>
 			</h:form>
 		</p:dialog>
+
 	</ui:define>
 </ui:composition>
