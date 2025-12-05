@@ -26,6 +26,11 @@ public class LoginFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+        
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache"); 
+        res.setDateHeader("Expires", 0);
+
         HttpSession session = req.getSession(false);
 
         boolean logado = false;

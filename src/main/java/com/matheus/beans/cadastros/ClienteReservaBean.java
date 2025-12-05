@@ -82,7 +82,7 @@ public class ClienteReservaBean implements Serializable {
 		}
 	}
 
-
+	
 	public void selecionarQuadra(Quadra quadra) {
 		this.quadraSelecionada = quadra;
 		this.novaReserva = new Reserva();

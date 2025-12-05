@@ -3,7 +3,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
 
 	<ui:define name="title">
         Fazer Reserva
@@ -105,7 +106,7 @@
 		</h:head>
 
 		<h:form id="formReserva">
-			<p:growl id="mensagem" showDetail="true" life="5000" />
+			<p:growl id="mensagem" life="5000" />
 
 			<p:panel header="Escolha sua Quadra"
 				styleClass="painel-custom-header" style="margin-top:20px;">
