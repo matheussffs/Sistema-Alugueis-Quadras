@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,10 @@ public class MinhasReservasBean implements Serializable {
     @PostConstruct
     public void init() {
         carregarReservas();
+        
+        if (minhasReservas != null) {
+            minhasReservas.sort(Comparator.comparing(Reserva::getResId).reversed());
+        }
     }
 
     private void carregarReservas() {
