@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import java.io.ByteArrayInputStream;
@@ -82,7 +86,6 @@ public class ClienteReservaBean implements Serializable {
 		}
 	}
 
-	
 	public void selecionarQuadra(Quadra quadra) {
 		this.quadraSelecionada = quadra;
 		this.novaReserva = new Reserva();
@@ -107,16 +110,31 @@ public class ClienteReservaBean implements Serializable {
 		int mes = calData.get(Calendar.MONTH);
 		int dia = calData.get(Calendar.DAY_OF_MONTH);
 
+		ZoneId zoneSystem = ZoneId.systemDefault(); 
+		LocalDate dataSel = dataSelecionada.toInstant().atZone(zoneSystem).toLocalDate();
+		LocalDate hoje = LocalDate.now(zoneSystem);
+
+		int horaAtual = LocalTime.now(zoneSystem).getHour();
+		boolean ehHoje = dataSel.isEqual(hoje);
+
 		for (String slot : todosOsHorarios) {
 			int horaInicio = Integer.parseInt(slot.substring(0, 2));
+
+			if (ehHoje && horaInicio <= horaAtual) {
+				continue;
+			}
+
 			Reserva reservaFantasma = new Reserva();
 			reservaFantasma.setQuadra(quadraSelecionada);
-			Calendar calUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			calUTC.set(ano, mes, dia, horaInicio, 0, 0);
-			calUTC.set(Calendar.MILLISECOND, 0);
-			Date dtInicio = calUTC.getTime();
-			calUTC.add(Calendar.HOUR_OF_DAY, 1);
-			Date dtFim = calUTC.getTime();
+
+			Calendar calCheck = Calendar.getInstance();
+			calCheck.set(ano, mes, dia, horaInicio, 0, 0);
+			calCheck.set(Calendar.MILLISECOND, 0);
+
+			Date dtInicio = calCheck.getTime();
+			calCheck.add(Calendar.HOUR_OF_DAY, 1);
+			Date dtFim = calCheck.getTime();
+
 			reservaFantasma.setResDtInicio(dtInicio);
 			reservaFantasma.setResDtFim(dtFim);
 
@@ -138,18 +156,21 @@ public class ClienteReservaBean implements Serializable {
 				JsfUtil.redirect("/SistemaAlugueis/login.xhtml");
 				return;
 			}
+
 			Calendar calData = Calendar.getInstance();
 			calData.setTime(dataSelecionada);
 			int ano = calData.get(Calendar.YEAR);
 			int mes = calData.get(Calendar.MONTH);
 			int dia = calData.get(Calendar.DAY_OF_MONTH);
 			int horaInicio = Integer.parseInt(horarioSelecionado.substring(0, 2));
-			Calendar calUTC = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			calUTC.set(ano, mes, dia, horaInicio, 0, 0);
-			calUTC.set(Calendar.MILLISECOND, 0);
-			Date dtInicio = calUTC.getTime();
-			calUTC.add(Calendar.HOUR_OF_DAY, 1);
-			Date dtFim = calUTC.getTime();
+
+			Calendar calFinal = Calendar.getInstance();
+			calFinal.set(ano, mes, dia, horaInicio, 0, 0);
+			calFinal.set(Calendar.MILLISECOND, 0);
+
+			Date dtInicio = calFinal.getTime();
+			calFinal.add(Calendar.HOUR_OF_DAY, 1);
+			Date dtFim = calFinal.getTime();
 
 			novaReserva.setUsuario(clienteLogado);
 			novaReserva.setQuadra(this.quadraSelecionada);

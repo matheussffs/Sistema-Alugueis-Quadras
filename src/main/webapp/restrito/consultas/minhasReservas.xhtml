@@ -22,20 +22,22 @@
 					sortBy="#{reserva.resId}" sortOrder="descending"
 					emptyMessage="Você ainda não possui nenhuma reserva."
 					style="margin-top:10px;">
-					
+
 					<p:column headerText="Quadra">
 						<h:outputText value="#{reserva.quadra.quaNome}" />
 					</p:column>
 
 					<p:column headerText="Início" sortBy="#{reserva.resDtInicio}">
 						<h:outputText value="#{reserva.resDtInicio}">
-							<f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm"
+								timeZone="America/Sao_Paulo" />
 						</h:outputText>
 					</p:column>
 
 					<p:column headerText="Fim" sortBy="#{reserva.resDtFim}">
 						<h:outputText value="#{reserva.resDtFim}">
-							<f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy 'às' HH:mm"
+								timeZone="America/Sao_Paulo" />
 						</h:outputText>
 					</p:column>
 

@@ -83,18 +83,22 @@ body {
 	text-align: center;
 }
 
+.btnLogin, .btnCadastro {
+	border-radius: 25px !important;
+	padding: 6px 0 !important;
+	width: 180px !important;
+	font-size: 0.9rem !important;
+	font-weight: bold !important;
+	display: inline-block !important;
+	transition: all 0.3s ease !important;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .btnLogin {
 	background-color: #10B981 !important;
 	color: #fff !important;
 	border: none !important;
-	padding: 12px;
-	border-radius: 25px !important;
-	cursor: pointer;
-	font-size: 1em;
-	font-weight: bold;
-	transition: background-color 0.4s ease, transform 0.4s ease !important;
-	width: 100%;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 .btnLogin:hover {
@@ -102,38 +106,40 @@ body {
 	transform: scale(1.02);
 }
 
-.ui-button.btnLogin {
-	background: #10B981 !important;
-	border: none !important;
-	color: #FFFFFF !important;
-	border-radius: 25px !important;
-}
-
 .btnCadastro {
-	width: 100%;
-	background-color: #10B981 !important;
-	border-color: #10B981 !important;
-	color: #fff !important;
-	border-radius: 25px !important;
-	padding: 12px;
-	font-weight: bold;
-	font-size: 1em;
-	transition: background-color 0.4s ease, transform 0.4s ease !important;
+	background-color: #ffffff !important;
+	border: 1px solid #10B981 !important;
+	color: #10B981 !important;
 }
 
 .btnCadastro:hover {
-	background-color: #059669 !important;
-	border-color: #059669 !important;
+	background-color: #10B981 !important;
+	color: #ffffff !important;
 	transform: scale(1.02);
 	text-decoration: none;
 }
 
-.ui-button.btnCadastro {
-	background: #10B981 !important;
-	border: none !important;
-	color: #FFFFFF !important;
-	border-radius: 25px !important;
+.btnLogin .ui-button-text, .btnCadastro .ui-button-text {
+	padding: 0 !important;
+	line-height: normal;
 }
+
+.btnDialog {
+	background-color: #10B981 !important;
+	color: #fff !important;
+	border: none !important;
+	border-radius: 25px !important;
+	padding: 8px 25px !important;
+	font-weight: bold !important;
+	margin-top: 15px !important;
+	font-size: 1rem !important;
+}
+
+.btnDialog:hover {
+	background-color: #059669 !important;
+	transform: scale(1.02);
+}
+
 div ~ a {
 	text-align: center;
 }
@@ -147,12 +153,14 @@ div ~ a {
 	display: block;
 	text-align: center;
 	margin-top: 15px;
-	font-size: 14px;
+	font-size: 13px;
 	color: #0EA5E9;
 	text-decoration: none;
+	transition: color 0.2s;
 }
 
 .link-esqueci:hover {
+	color: #10B981;
 	text-decoration: underline;
 }
 
@@ -166,11 +174,22 @@ div ~ a {
 
 .padPg.pgWidth {
 	padding: 0;
-	margin-bottom: 15px;
+	margin-bottom: 12px;
+	text-align: center;
 }
 
 .padPg.pgWidth:last-of-type {
 	margin-bottom: 0;
+}
+
+.label-center {
+	text-align: center;
+	width: 100%;
+	display: block;
+	margin-bottom: 3px;
+	color: #555;
+	font-weight: 600;
+	font-size: 0.9rem;
 }
 </style>
 </h:head>
@@ -188,35 +207,43 @@ div ~ a {
 			<p:growl id="mensagem" life="5000" autoUpdate="true" />
 
 			<div class="divLogin">
-				<p:panelGrid columns="1" layout="grid">
-					<p:panelGrid columns="1" styleClass="padPg pgWidth pnTitulo">
+				<p:panelGrid columns="1" layout="grid"
+					styleClass="ui-panelgrid-blank">
+
+					<p:panelGrid columns="1" styleClass="padPg pgWidth">
 						<p:outputLabel value="Realize o Login!" styleClass="tituloTexto" />
 					</p:panelGrid>
 
 					<p:panelGrid columns="1" styleClass="padPg pgWidth">
-						<p:outputLabel value="CPF" for="usuario" />
-						<p:inputMask id="usuario" value="#{loginBean.cpf}"
-							styleClass="stInput" placeholder="Informe seu CPF"
-							mask="999.999.999-99" />
+						<div style="text-align: left; width: 100%;">
+							<p:outputLabel value="CPF" for="usuario"
+								styleClass="label-center" />
+							<p:inputMask id="usuario" value="#{loginBean.cpf}"
+								styleClass="stInput" placeholder="000.000.000-00"
+								mask="999.999.999-99" />
+						</div>
 					</p:panelGrid>
 
 					<p:panelGrid columns="1" styleClass="padPg pgWidth">
-						<p:outputLabel value="Senha" for="senha" />
-						<p:password id="senha" value="#{loginBean.senha}"
-							toggleMask="true" styleClass="stInput"
-							placeholder="Informe sua senha" />
+						<div style="text-align: left; width: 100%;">
+							<p:outputLabel value="Senha" for="senha"
+								styleClass="label-center" />
+							<p:password id="senha" value="#{loginBean.senha}"
+								toggleMask="true" styleClass="stInput"
+								placeholder="Sua senha secreta" />
+						</div>
 					</p:panelGrid>
 
 					<p:panelGrid columns="1" styleClass="padPg pgWidth">
-						<p:commandButton value="Login"
+						<p:commandButton value="Entrar"
 							actionListener="#{loginBean.doLogin()}" styleClass="btnLogin"
 							process="@form" update="@form" icon="pi pi-sign-in" ajax="false" />
 					</p:panelGrid>
 
 					<p:panelGrid columns="1" styleClass="padPg pgWidth">
-						<p:button value="Cadastrar-se" icon="pi pi-user-plus"
+						<p:button value="Criar Conta" icon="pi pi-user-plus"
 							outcome="/publico/cadastros/cadastro-cliente.xhtml"
-							styleClass="btnCadastro ui-button-secondary" />
+							styleClass="btnCadastro" />
 					</p:panelGrid>
 
 					<p:commandLink value="Esqueci minha senha"
@@ -236,39 +263,42 @@ div ~ a {
 				<p:panelGrid columns="1" layout="grid"
 					styleClass="ui-panelgrid-blank">
 
-					<p:outputLabel
-						value="Para recuperar sua senha, confirme seu CPF e Telefone cadastrados."
-						style="margin-bottom: 15px;" />
+					<p:outputLabel value="Confirme seus dados para redefinir a senha."
+						style="margin-bottom: 10px; display:block; text-align:center; color:#555;" />
 
-					<h:outputLabel for="cpfEsqueci" value="Seu CPF:" />
+					<h:outputLabel for="cpfEsqueci" value="Seu CPF:"
+						style="font-weight:bold;" />
 					<p:inputMask id="cpfEsqueci" value="#{loginBean.cpf}"
-						mask="999.999.999-99" required="true" />
+						mask="999.999.999-99" required="true" style="width:100%" />
 
-					<h:outputLabel for="telEsqueci" value="Seu Telefone (c/ DDD):"
-						style="margin-top: 10px;" />
+					<h:outputLabel for="telEsqueci" value="Seu Telefone:"
+						style="margin-top: 10px; font-weight:bold; display:block;" />
 					<p:inputMask id="telEsqueci" value="#{loginBean.telefone}"
-						mask="(99) 99999-9999" required="true" />
+						mask="(99) 99999-9999" required="true" style="width:100%" />
 
 					<p:separator style="margin-top: 15px;" />
 
-					<h:outputLabel for="novaSenha"
-						value="Nova Senha (mín. 8 caracteres):" />
+					<h:outputLabel for="novaSenha" value="Nova Senha:"
+						style="font-weight:bold;" />
 					<p:password id="novaSenha" value="#{loginBean.novaSenha}"
-						toggleMask="true" feedback="true" required="true" />
+						toggleMask="true" feedback="true" required="true"
+						style="width:100%" />
 
-					<h:outputLabel for="confSenha" value="Confirme a Nova Senha:"
-						style="margin-top: 10px;" />
+					<h:outputLabel for="confSenha" value="Confirme a Senha:"
+						style="margin-top: 10px; font-weight:bold; display:block;" />
 					<p:password id="confSenha"
 						value="#{loginBean.confirmacaoNovaSenha}" toggleMask="true"
-						required="true" />
+						required="true" style="width:100%" />
 
 				</p:panelGrid>
 
 				<p:separator />
 
-				<p:commandButton value="Alterar Senha" icon="pi pi-check"
-					actionListener="#{loginBean.alterarSenha}" process="@form"
-					update="@form :form1:mensagem" />
+				<div style="text-align: center; padding-bottom: 10px;">
+					<p:commandButton value="Alterar Senha" icon="pi pi-check"
+						actionListener="#{loginBean.alterarSenha}" process="@form"
+						update="@form :form1:mensagem" styleClass="btnDialog" />
+				</div>
 
 			</h:form>
 		</p:dialog>

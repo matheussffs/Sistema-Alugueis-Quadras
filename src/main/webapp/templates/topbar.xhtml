@@ -6,19 +6,18 @@
 <ui:composition>
 
     <style>
-        /* 1. Fundo VERDE (Identidade do Flash Quadras) */
         .topbar-custom {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 15px;
             height: 60px;
-            background-color: #009688; /* Verde Esmeralda */
+            background-color: #009688; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             position: sticky;
             top: 0;
             z-index: 1000;
-            color: #ffffff; /* Define cor base branca */
+            color: #ffffff; 
         }
 
         .topbar-left {
@@ -26,7 +25,6 @@
             align-items: center;
         }
 
-        /* 2. Título em Branco */
         .topbar-title {
             font-size: 1.5rem;
             font-weight: bold;
@@ -34,7 +32,6 @@
             color: #ffffff !important; 
         }
 
-        /* 3. Forçar itens do Menu a ficarem Brancos */
         .topbar-custom .ui-menubar {
             background: transparent !important;
             border: none !important;
@@ -42,16 +39,14 @@
         
         .topbar-custom .ui-menubar .ui-menuitem-link .ui-menuitem-text,
         .topbar-custom .ui-menubar .ui-menuitem-link .ui-menuitem-icon {
-            color: #ffffff !important; /* Texto e Ícones brancos */
+            color: #ffffff !important; 
         }
 
-        /* Efeito Hover no menu (opcional, para ficar bonito) */
         .topbar-custom .ui-menubar .ui-menuitem-link:hover {
             background-color: rgba(255, 255, 255, 0.2) !important;
             border-radius: 4px;
         }
 
-        /* --- RESPONSIVIDADE --- */
         .desktop-view { display: none !important; }
         .mobile-view { display: block !important; }
 
@@ -84,7 +79,7 @@
                         url="#{request.contextPath}/restrito/cadastros/usuarios.xhtml" />
                     <p:menuitem value="Gráficos" icon="pi pi-fw pi-chart-bar" ajax="false"
                         url="#{request.contextPath}/restrito/consultas/dashboardGraficos.xhtml" />
-                    <p:menuitem value="Conta" icon="pi pi-fw pi-user-edit" ajax="false"
+                    <p:menuitem value="Minha Conta" icon="pi pi-fw pi-user-edit" ajax="false"
                         url="#{request.contextPath}/restrito/cadastros/minhaConta.xhtml" />
                 </p:menubar>
 
